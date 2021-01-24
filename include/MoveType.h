@@ -6,9 +6,7 @@ namespace Entities
     {
         NONE = ' ',
         WALK = 'W',
-        CAPTURE = 'C',
         EN_PASSANT_CAPTURE = 'E',
-        DOUBLE_PAWN_WALK = 'D',
         QUEEN_PROMOTION = 'Q',
         ROOK_PROMOTION = 'R',
         KNIGHT_PROMOTION = 'K',

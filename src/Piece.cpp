@@ -33,7 +33,7 @@ namespace Entities
                 {
                     if (game->GetPiece(newX, newY)->player != player)
                     {
-                        potentialMoves.push_back(new Move(this, newX, newY, CAPTURE));
+                        potentialMoves.push_back(new Move(this, newX, newY, WALK));
                     }
 
                     break;

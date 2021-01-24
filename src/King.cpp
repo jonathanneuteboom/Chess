@@ -29,7 +29,7 @@ namespace Entities
                 if (game->GetPiece(newX, newY)->player == player)
                     continue;
 
-                move = new Move(this, newX, newY, CAPTURE);
+                move = new Move(this, newX, newY, WALK);
             }
             else
             {

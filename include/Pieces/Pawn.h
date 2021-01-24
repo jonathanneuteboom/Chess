@@ -26,5 +26,11 @@ namespace Entities
         virtual void ExecuteMove(Chess *game, Move *move);
 
         virtual PieceType GetType();
+
+        void AppendPromotionMoves(int newX, int newY, std::vector<Move *> &potentialMoves);
+
+        void AppendNormalCaptureMoves(int direction, std::vector<Move *> &potentialMoves);
+
+        void AppendEnPassantMoves(int direction, std::vector<Move *> &potentialMoves);
     };
 } // namespace Entities

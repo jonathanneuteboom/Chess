@@ -27,16 +27,12 @@ namespace Entities
             if (game->IsSquareOusideBounds(newX, newY))
                 continue;
 
-            if (game->IsSquareFree(newX, newY))
-            {
-                newMove = new Move(this, newX, newY, WALK);
-                potentialMoves.push_back(newMove);
-            }
-            else if (game->GetPiece(newX, newY)->player != player)
-            {
-                newMove = new Move(this, newX, newY, CAPTURE);
-                potentialMoves.push_back(newMove);
-            }
+            Piece *piece = game->GetPiece(newX, newY);
+            if (piece != nullptr && piece->player == player)
+                continue;
+
+            newMove = new Move(this, newX, newY, WALK);
+            potentialMoves.push_back(newMove);
         }
     }
 

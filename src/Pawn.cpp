@@ -27,69 +27,65 @@ namespace Entities
                std::abs(this->x - x) == 1;
     }
 
-    void Pawn::AppendMoves(Chess *game, std::vector<Move *> &potentialMoves)
+    void Pawn::AppendPromotionMoves(int newX, int newY, std::vector<Move *> &potentialMoves)
     {
-        int direction = Player::WHITE == player ? 1 : -1;
         Move *newMove;
-        int newX, newY = y + direction;
-        if (game->IsSquareFree(x, newY))
+
+        bool lastRow = player == WHITE ? game->height - 1 : 0;
+        if (lastRow != newY)
         {
-            bool isLastRow = game->IsSquareOusideBounds(x, newY + direction);
-            if (isLastRow)
-            {
-                newMove = new Move(this, x, newY, QUEEN_PROMOTION);
-                potentialMoves.push_back(newMove);
-
-                newMove = new Move(this, x, newY, ROOK_PROMOTION);
-                potentialMoves.push_back(newMove);
-
-                newMove = new Move(this, x, newY, KNIGHT_PROMOTION);
-                potentialMoves.push_back(newMove);
-
-                newMove = new Move(this, x, newY, BISHOP_PROMOTION);
-                potentialMoves.push_back(newMove);
-            }
-            else
-            {
-                newMove = new Move(this, x, newY, WALK);
-                potentialMoves.push_back(newMove);
-
-                newY = y + 2 * direction;
-                if (!didPawnMove && game->IsSquareFree(x, newY))
-                {
-                    newMove = new Move(this, x, newY, DOUBLE_PAWN_WALK);
-                    potentialMoves.push_back(newMove);
-                }
-            }
+            newMove = new Move(this, x, newY, WALK);
+            potentialMoves.push_back(newMove);
         }
+        else
+        {
+            newMove = new Move(this, newX, newY, QUEEN_PROMOTION);
+            potentialMoves.push_back(newMove);
 
+            newMove = new Move(this, newX, newY, ROOK_PROMOTION);
+            potentialMoves.push_back(newMove);
+
+            newMove = new Move(this, newX, newY, KNIGHT_PROMOTION);
+            potentialMoves.push_back(newMove);
+
+            newMove = new Move(this, newX, newY, BISHOP_PROMOTION);
+            potentialMoves.push_back(newMove);
+        }
+    }
+
+    void Pawn::AppendNormalCaptureMoves(int direction, std::vector<Move *> &potentialMoves)
+    {
         const int normalCaptureDirections[2][2] = {
             {x - 1, y + direction},
             {x + 1, y + direction},
         };
         for (int i = 0; i < 2; i++)
         {
-            newX = normalCaptureDirections[i][0];
-            newY = normalCaptureDirections[i][1];
+            int newX = normalCaptureDirections[i][0];
+            int newY = normalCaptureDirections[i][1];
             if (game->IsSquareOusideBounds(newX, newY))
                 continue;
+
             Piece *piece = game->GetPiece(newX, newY);
             if (piece == nullptr)
                 continue;
             if (piece->player != player)
             {
-                potentialMoves.push_back(new Move(this, newX, newY, CAPTURE));
+                AppendPromotionMoves(newX, newY, potentialMoves);
             }
         }
+    }
 
+    void Pawn::AppendEnPassantMoves(int direction, std::vector<Move *> &potentialMoves)
+    {
         const int enPassantPawns[2][2] = {
             {x - 1, y},
             {x + 1, y},
         };
         for (int i = 0; i < 2; i++)
         {
-            newX = enPassantPawns[i][0];
-            newY = enPassantPawns[i][1];
+            int newX = enPassantPawns[i][0];
+            int newY = enPassantPawns[i][1];
 
             Piece *piece = game->GetPiece(newX, newY);
             if (piece == nullptr)
@@ -97,9 +93,32 @@ namespace Entities
 
             if (piece->GetType() == PieceType::PAWN_EN_PASSANT)
             {
-                potentialMoves.push_back(new Move(this, newX, newY + direction, EN_PASSANT_CAPTURE));
+                Move *newMove = new Move(this, newX, newY + direction, EN_PASSANT_CAPTURE);
+                potentialMoves.push_back(newMove);
             }
         }
+    }
+
+    void Pawn::AppendMoves(Chess *game, std::vector<Move *> &potentialMoves)
+    {
+        int direction = Player::WHITE == player ? 1 : -1;
+
+        int newX = x;
+        int newY = y + direction;
+        if (game->IsSquareFree(newX, newY))
+        {
+            AppendPromotionMoves(newX, newY, potentialMoves);
+
+            newY += direction;
+            if (!didPawnMove && game->IsSquareFree(newX, newY))
+            {
+                AppendPromotionMoves(newX, newY, potentialMoves);
+            }
+        }
+
+        AppendNormalCaptureMoves(direction, potentialMoves);
+
+        AppendEnPassantMoves(direction, potentialMoves);
     }
 
     void Pawn::ExecuteMove(Chess *game, Move *move)
@@ -110,12 +129,21 @@ namespace Entities
         switch (move->moveType)
         {
         case WALK:
+        {
+            int stepLength = abs(y - move->newSquare->y);
+            if (stepLength == 2)
+            {
+                doubleSquareMoveRound = game->currentRound;
+            }
+
+            Piece *piece = game->GetPiece(move->newSquare->x, move->newSquare->y);
+            if (piece != nullptr)
+            {
+                game->RemovePiece(move->newSquare->x, move->newSquare->y);
+            }
             game->MovePiece(move);
             return;
-        case CAPTURE:
-            game->RemovePiece(move->newSquare->x, move->newSquare->y);
-            game->MovePiece(move);
-            return;
+        }
         case EN_PASSANT_CAPTURE:
         {
             Piece *opposingPawn = game->GetPiece(move->newSquare->x, move->piece->x);
@@ -123,10 +151,6 @@ namespace Entities
             game->MovePiece(move);
             return;
         }
-        case DOUBLE_PAWN_WALK:
-            game->MovePiece(move);
-            doubleSquareMoveRound = game->currentRound;
-            return;
         case QUEEN_PROMOTION:
             newPieceType = QUEEN;
             break;
