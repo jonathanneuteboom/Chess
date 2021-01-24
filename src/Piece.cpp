@@ -18,12 +18,11 @@ namespace Entities
         Chess *game,
         const int directions[][2],
         int numberOfDirections,
-        std::vector<Move *> &potentialMoves,
-        int maxSteps)
+        std::vector<Move *> &potentialMoves)
     {
         for (int i = 0; i < numberOfDirections; i++)
         {
-            for (int steps = 1; maxSteps == 0 || steps <= maxSteps; steps++)
+            for (int steps = 1;; steps++)
             {
                 int newX = x + steps * directions[i][0];
                 int newY = y + steps * directions[i][1];

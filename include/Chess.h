@@ -40,5 +40,8 @@ namespace Entities
         void RemovePiece(int x, int y);
         void RemovePiece(Piece *piece);
         void MovePiece(Move *move);
+        int GetPlayerIndex(Player player);
+        bool CanPlayerHitSquare(Player player, int x, int y);
+        Player GetOpponent(Player player);
     };
 } // namespace Entities

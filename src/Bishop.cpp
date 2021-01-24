@@ -3,35 +3,45 @@
 
 #include "Piece.h"
 #include "Move.h"
+#include "Pieces\Bishop.h"
 
 namespace Entities
 {
-    class Bishop : public Piece
+    Bishop::Bishop(int x, int y, Player player) : Piece(x, y, player) {}
+
+    void Bishop::AppendMoves(Chess *game, std::vector<Move *> &potentialMoves)
     {
-        const int directions[4][2] = {
-            {1, 1},
-            {1, -1},
-            {-1, -1},
-            {-1, 1}};
+        AppendMovesWithlinearDirections(game, directions, 4, potentialMoves);
+    }
 
-    public:
-        Bishop(int x, int y, Player player) : Piece(x, y, player) {}
+    bool Bishop::CanCaptureSquare(int x, int y, Chess *game)
+    {
+        return Bishop::CanCaptureSquare(this->x, this->y, x, y, game);
+    }
 
-        virtual void AppendMoves(Chess *game, std::vector<Move *> &potentialMoves)
+    bool Bishop::CanCaptureSquare(int bishopX, int bishopY, int x, int y, Chess *game)
+    {
+        int dx = x - bishopX;
+        int dy = y - bishopY;
+        if (abs(dx) != abs(dy))
+            return false;
+
+        int squaresInBetween = abs(dx) - 1;
+        int xRichting = dx / abs(dx);
+        int yRichting = dx / abs(dy);
+        for (int i = 1; i <= squaresInBetween; i++)
         {
-            AppendMovesWithlinearDirections(game, directions, 4, potentialMoves);
+            int newX = bishopX + i * xRichting;
+            int newY = bishopY + i * yRichting;
+            if (game->GetPiece(newX, newY) != nullptr)
+                return false;
         }
 
-        virtual bool CanCaptureSquare(int x, int y)
-        {
-            int dx = abs(this->x - x);
-            int dy = abs(this->x - y);
-            return dx == dy;
-        }
+        return true;
+    }
 
-        virtual PieceType GetType()
-        {
-            return BISHOP;
-        }
-    };
+    PieceType Bishop::GetType()
+    {
+        return BISHOP;
+    }
 } // namespace Entities

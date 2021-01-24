@@ -2,40 +2,38 @@
 #include <stdlib.h>
 
 #include "Piece.h"
+#include "Pieces\Bishop.h"
+#include "Pieces\Rook.h"
+#include "Pieces\Queen.h"
 
 namespace Entities
 {
-    class Queen : public Piece
+    Queen::Queen(int x, int y, Player player) : Piece(x, y, player) {}
+
+    void Queen::AppendMoves(Chess *game, std::vector<Move *> &potentialMoves)
     {
-        const int directions[8][2] = {
-            {1, 0},
-            {1, -1},
-            {0, -1},
-            {-1, -1},
-            {-1, 0},
-            {-1, 1},
-            {0, 1},
-            {1, 1},
-        };
+        AppendMovesWithlinearDirections(game, directions, 8, potentialMoves);
+    }
 
-    public:
-        Queen(int x, int y, Player player) : Piece(x, y, player) {}
-
-        virtual void AppendMoves(Chess *game, std::vector<Move *> &potentialMoves)
+    bool Queen::CanCaptureSquare(int x, int y, Chess *game)
+    {
+        int dx = abs(this->x - x);
+        int dy = abs(this->y - x);
+        if (dx == dy)
         {
-            AppendMovesWithlinearDirections(game, directions, 8, potentialMoves);
+            return Bishop::CanCaptureSquare(this->x, this->y, x, y, game);
         }
 
-        virtual bool CanCaptureSquare(int x, int y)
+        if (this->x == x || this->y == y)
         {
-            int dx = abs(this->x - x);
-            int dy = abs(this->x - x);
-            return dx == dy || this->x == x || this->y == y;
+            return Rook::CanCaptureSquare(this->x, this->y, x, y, game);
         }
 
-        virtual PieceType GetType()
-        {
-            return QUEEN;
-        }
-    };
+        return false;
+    }
+
+    PieceType Queen::GetType()
+    {
+        return QUEEN;
+    }
 } // namespace Entities

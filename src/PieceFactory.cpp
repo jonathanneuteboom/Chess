@@ -3,12 +3,13 @@
 #include "PieceType.h"
 #include "Chess.h"
 #include "Player.h"
-#include "Pawn.cpp"
-#include "Knight.cpp"
-#include "Bishop.cpp"
-#include "Rook.cpp"
-#include "Queen.cpp"
-#include "King.cpp"
+
+#include "Pieces\King.h"
+#include "Pieces\Queen.h"
+#include "Pieces\Rook.h"
+#include "Pieces\Bishop.h"
+#include "Pieces\Knight.h"
+#include "Pieces\Pawn.h"
 
 using namespace Entities;
 
@@ -19,23 +20,23 @@ namespace Factories
         switch (letter)
         {
         case PAWN:
-            return new Pawn(x, y, player, game);
+            return new Entities::Pawn(x, y, player, game);
         case PAWN_EN_PASSANT:
-            return new Pawn(x, y, player, game);
+            return new Entities::Pawn(x, y, player, game);
         case BISHOP:
-            return new Bishop(x, y, player);
+            return new Entities::Bishop(x, y, player);
         case KING:
-            return new King(x, y, player, false);
+            return new Entities::King(x, y, player, false);
         case KING_CASTLE:
-            return new King(x, y, player);
+            return new Entities::King(x, y, player);
         case KNIGHT:
-            return new Knight(x, y, player);
+            return new Entities::Knight(x, y, player);
         case QUEEN:
-            return new Queen(x, y, player);
+            return new Entities::Queen(x, y, player);
         case ROOK:
-            return new Rook(x, y, player, false);
+            return new Entities::Rook(x, y, player, false);
         case ROOK_CASTLE:
-            return new Rook(x, y, player);
+            return new Entities::Rook(x, y, player);
         }
 
         throw "No Piece option";

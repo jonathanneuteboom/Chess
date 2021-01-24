@@ -58,7 +58,7 @@ namespace Entities
 
             Piece *piece = PieceFactory::CreatePiece(player, *letter, x, y, this);
 
-            int playerIndex = player == WHITE ? 0 : 1;
+            int playerIndex = GetPlayerIndex(player);
             this->pieces[playerIndex][pieceNumber++] = piece;
             SetPiece(piece, x, y);
 
@@ -66,10 +66,31 @@ namespace Entities
         }
     }
 
+    bool Chess::CanPlayerHitSquare(Player player, int x, int y)
+    {
+        int playerIndex = GetPlayerIndex(player);
+        for (int i = 0; i < numberOfPieces[playerIndex]; i++)
+        {
+            if (pieces[playerIndex][i]->CanCaptureSquare(x, y, this))
+                return true;
+        }
+        return false;
+    }
+
+    Player Chess::GetOpponent(Player player)
+    {
+        return player == WHITE ? BLACK : WHITE;
+    }
+
+    int Chess::GetPlayerIndex(Player player)
+    {
+        return player == WHITE ? 0 : 1;
+    }
+
     void Chess::InitBoard(char whitePieces[], char blackPieces[])
     {
         int whitePlayer = 0;
-        numberOfPieces[whitePlayer] = GetNumberOfPieces( whitePieces);
+        numberOfPieces[whitePlayer] = GetNumberOfPieces(whitePieces);
         pieces[whitePlayer] = new Piece *[numberOfPieces[whitePlayer]];
 
         int blackPlayer = 1;
@@ -147,7 +168,7 @@ namespace Entities
     void Chess::RemovePiece(int x, int y)
     {
         Piece *piece = GetPiece(x, y);
-        int playerIndex = piece->player == WHITE ? 0 : 1;
+        int playerIndex = GetPlayerIndex(piece->player);
         Piece **newPieces = new Piece *[numberOfPieces[playerIndex] - 1];
 
         int pieceCounter = 0;
@@ -184,13 +205,13 @@ namespace Entities
             RemovePiece(move->piece);
         }
 
-        currentPlayer = currentPlayer == WHITE ? BLACK : WHITE;
+        currentPlayer = GetOpponent(currentPlayer);
         currentRound++;
     }
 
     void Chess::AddPiece(Player player, PieceType pieceType, int x, int y)
     {
-        int playerIndex = player == WHITE ? 0 : 1;
+        int playerIndex = GetPlayerIndex(player);
         Piece **newPieces = new Piece *[numberOfPieces[playerIndex] + 1];
 
         for (int i = 0; i < numberOfPieces[playerIndex]; i++)

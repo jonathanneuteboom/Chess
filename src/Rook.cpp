@@ -1,37 +1,57 @@
-#include "Piece.h"
 #include <vector>
+#include <stdlib.h>
+
+#include "Pieces\Rook.h"
+#include "Piece.h"
 
 namespace Entities
 {
-    class Rook : public Piece
+    Rook::Rook(int x, int y, Player player, bool canCastle) : Piece(x, y, player)
     {
-        const int directions[4][2] = {
-            {1, 0},
-            {0, -1},
-            {-1, 0},
-            {0, 1}};
+        this->canCastle = canCastle;
+    }
 
-    public:
-        bool canCastle;
+    void Rook::AppendMoves(Chess *game, std::vector<Move *> &potentialMoves)
+    {
+        AppendMovesWithlinearDirections(game, directions, 4, potentialMoves);
+    }
 
-        Rook(int x, int y, Player player, bool canCastle = true) : Piece(x, y, player)
+    bool Rook::CanCaptureSquare(int x, int y, Chess *game)
+    {
+        return Rook::CanCaptureSquare(this->x, this->y, x, y, game);
+    }
+
+    bool Rook::CanCaptureSquare(int rookX, int rookY, int x, int y, Chess *game)
+    {
+        if (rookX == x)
         {
-            this->canCastle = canCastle;
+            int yRichting = rookY < y ? 1 : -1;
+            int sqauresInBetween = abs(rookY - y) - 1;
+            for (int i = 1; i <= sqauresInBetween; i++)
+            {
+                int newY = rookY + i * yRichting;
+                if (game->GetPiece(x, newY))
+                    return false;
+            }
         }
 
-        virtual void AppendMoves(Chess *game, std::vector<Move *> &potentialMoves)
+        if (rookY == y)
         {
-            AppendMovesWithlinearDirections(game, directions, 4, potentialMoves);
+            int xRichting = rookX < x ? 1 : -1;
+            int sqauresInBetween = abs(rookX - x) - 1;
+            for (int i = 1; i <= sqauresInBetween; i++)
+            {
+                int newX = rookX + i * xRichting;
+                if (game->GetPiece(newX, y))
+                    return false;
+            }
         }
 
-        virtual bool CanCaptureSquare(int x, int y)
-        {
-            return this->x == x || this->y == y;
-        }
+        return true;
+    }
 
-        virtual PieceType GetType()
-        {
-            return canCastle ? ROOK_CASTLE : ROOK;
-        }
-    };
+    PieceType Rook::GetType()
+    {
+        return canCastle ? ROOK_CASTLE : ROOK;
+    }
 } // namespace Entities
