@@ -1,0 +1,1 @@
+- elke pion kan direct (na zetten) provemeren: a3a1
