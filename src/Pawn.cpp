@@ -27,14 +27,14 @@ namespace Entities
                std::abs(this->x - x) == 1;
     }
 
-    void Pawn::AppendPromotionMoves(int newX, int newY, std::vector<Move *> &potentialMoves)
+    void Pawn::AppendWalkingMoves(int newX, int newY, std::vector<Move *> &potentialMoves)
     {
         Move *newMove;
 
         bool lastRow = player == WHITE ? game->height - 1 : 0;
         if (lastRow != newY)
         {
-            newMove = new Move(this, x, newY, WALK);
+            newMove = new Move(this, newX, newY, WALK);
             potentialMoves.push_back(newMove);
         }
         else
@@ -69,10 +69,10 @@ namespace Entities
             Piece *piece = game->GetPiece(newX, newY);
             if (piece == nullptr)
                 continue;
-            if (piece->player != player)
-            {
-                AppendPromotionMoves(newX, newY, potentialMoves);
-            }
+            if (piece->player == player)
+                continue;
+
+            AppendWalkingMoves(newX, newY, potentialMoves);
         }
     }
 
@@ -92,10 +92,10 @@ namespace Entities
                 continue;
 
             if (piece->GetType() == PieceType::PAWN_EN_PASSANT)
-            {
-                Move *newMove = new Move(this, newX, newY + direction, EN_PASSANT_CAPTURE);
-                potentialMoves.push_back(newMove);
-            }
+                continue;
+
+            Move *newMove = new Move(this, newX, newY + direction, EN_PASSANT_CAPTURE);
+            potentialMoves.push_back(newMove);
         }
     }
 
@@ -107,12 +107,12 @@ namespace Entities
         int newY = y + direction;
         if (game->IsSquareFree(newX, newY))
         {
-            AppendPromotionMoves(newX, newY, potentialMoves);
+            AppendWalkingMoves(newX, newY, potentialMoves);
 
             newY += direction;
             if (!didPawnMove && game->IsSquareFree(newX, newY))
             {
-                AppendPromotionMoves(newX, newY, potentialMoves);
+                AppendWalkingMoves(newX, newY, potentialMoves);
             }
         }
 

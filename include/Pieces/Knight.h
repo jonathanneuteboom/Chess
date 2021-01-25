@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include "Piece.h"
 
@@ -18,11 +18,8 @@ namespace Entities
 
     public:
         Knight(int x, int y, Player player);
-
         virtual bool CanCaptureSquare(int x, int y, Chess *game);
-
         virtual void AppendMoves(Chess *game, std::vector<Move *> &potentialMoves);
-
         virtual PieceType GetType();
     };
 } // namespace Entities
