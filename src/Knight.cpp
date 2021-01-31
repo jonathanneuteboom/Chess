@@ -8,13 +8,14 @@ namespace Entities
 {
     Knight::Knight(int x, int y, Player player) : Piece(x, y, player) {}
 
-    bool Knight::CanCaptureSquare(int x, int y, Chess *game)
+    bool Knight::CanPieceCaptureSquare(int x, int y, Chess *game)
     {
         (void)game;
 
         int dx = abs(this->x - x);
         int dy = abs(this->y - y);
-        return dx + dy == 3;
+        int difference = abs(dx - dy);
+        return dx + dy == 3 && difference == 1;
     }
 
     void Knight::AppendMoves(Chess *game, std::vector<Move *> &potentialMoves)

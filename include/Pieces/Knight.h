@@ -18,7 +18,7 @@ namespace Entities
 
     public:
         Knight(int x, int y, Player player);
-        virtual bool CanCaptureSquare(int x, int y, Chess *game);
+        virtual bool CanPieceCaptureSquare(int x, int y, Chess *game);
         virtual void AppendMoves(Chess *game, std::vector<Move *> &potentialMoves);
         virtual PieceType GetType();
     };

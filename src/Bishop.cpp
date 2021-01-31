@@ -14,12 +14,12 @@ namespace Entities
         AppendMovesWithlinearDirections(game, directions, 4, potentialMoves);
     }
 
-    bool Bishop::CanCaptureSquare(int x, int y, Chess *game)
+    bool Bishop::CanPieceCaptureSquare(int x, int y, Chess *game)
     {
-        return Bishop::CanCaptureSquare(this->x, this->y, x, y, game);
+        return Bishop::CanPieceCaptureSquare(this->x, this->y, x, y, game);
     }
 
-    bool Bishop::CanCaptureSquare(int bishopX, int bishopY, int x, int y, Chess *game)
+    bool Bishop::CanPieceCaptureSquare(int bishopX, int bishopY, int x, int y, Chess *game)
     {
         int dx = x - bishopX;
         int dy = y - bishopY;

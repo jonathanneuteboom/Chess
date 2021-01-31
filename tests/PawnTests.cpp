@@ -67,6 +67,28 @@ TEST(Pion, promotion)
     ASSERT_EQ(bishopPromotion->moveType, BISHOP_PROMOTION);
 }
 
+TEST(Pion, promotionMove)
+{
+    // arrange
+    std::vector<Move *> moves;
+    Chess c = Chess(4, 4);
+    c.InitBoard((char *)"--p", NULL);
+    c.PrintBoard();
+
+    // act
+    c.AppendMoves(moves);
+    c.ExecuteMove(moves[0]);
+
+    //assert
+    EXPECT_EQ(c.numberOfPieces[c.GetPlayerIndex(WHITE)], 1);
+    EXPECT_EQ(c.numberOfPieces[c.GetPlayerIndex(BLACK)], 0);
+
+    Piece *queen = c.pieces[c.GetPlayerIndex(WHITE)][0];
+    EXPECT_EQ(queen->GetType(), QUEEN);
+    EXPECT_EQ(queen->x, 0);
+    EXPECT_EQ(queen->y, 3);
+}
+
 TEST(Pion, enPassant)
 {
     // arrange

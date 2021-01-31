@@ -14,6 +14,6 @@ include_directories(${This} src)
 file(GLOB SOURCES "src/*.cpp")
 file(GLOB HEADERS "include/*.h")
 
-add_library(${This} STATIC ${SOURCES} ${Headers})
+add_library(${This} STATIC ${SOURCES} ${HEADERS})
 
 add_subdirectory(tests)

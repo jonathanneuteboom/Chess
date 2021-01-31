@@ -20,8 +20,8 @@ namespace Entities
         Piece(int x, int y, Player player);
         virtual void AppendMoves(Chess *game, std::vector<Move *> &potentialMoves) = 0;
         virtual PieceType GetType() = 0;
-        virtual bool CanCaptureSquare(int x, int y, Chess *game) = 0;
-        virtual void ExecuteMove(Chess *game, Move *move);
+        virtual bool CanPieceCaptureSquare(int x, int y, Chess *game = NULL) = 0;
+        virtual void MovePiece(Move *move);
 
         void AppendMovesWithlinearDirections(
             Chess *game,

@@ -16,8 +16,8 @@ namespace Entities
     public:
         Bishop(int x, int y, Player player);
         virtual void AppendMoves(Chess *game, std::vector<Move *> &potentialMoves);
-        virtual bool CanCaptureSquare(int x, int y, Chess *game);
-        static bool CanCaptureSquare(int bishopX, int bishopY, int x, int y, Chess *game);
+        virtual bool CanPieceCaptureSquare(int x, int y, Chess *game);
+        static bool CanPieceCaptureSquare(int bishopX, int bishopY, int x, int y, Chess *game);
         virtual PieceType GetType();
     };
 } // namespace Entities

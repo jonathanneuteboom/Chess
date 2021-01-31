@@ -16,12 +16,12 @@ namespace Entities
         AppendMovesWithlinearDirections(game, directions, 4, potentialMoves);
     }
 
-    bool Rook::CanCaptureSquare(int x, int y, Chess *game)
+    bool Rook::CanPieceCaptureSquare(int x, int y, Chess *game)
     {
-        return Rook::CanCaptureSquare(this->x, this->y, x, y, game);
+        return Rook::CanPieceCaptureSquare(this->x, this->y, x, y, game);
     }
 
-    bool Rook::CanCaptureSquare(int rookX, int rookY, int x, int y, Chess *game)
+    bool Rook::CanPieceCaptureSquare(int rookX, int rookY, int x, int y, Chess *game)
     {
         if (rookX == x)
         {

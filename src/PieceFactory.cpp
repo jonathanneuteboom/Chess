@@ -20,13 +20,12 @@ namespace Factories
         switch (letter)
         {
         case PAWN:
-            return new Entities::Pawn(x, y, player, game);
         case PAWN_EN_PASSANT:
-            return new Entities::Pawn(x, y, player, game, game->GetCurrentRound());
+            return new Entities::Pawn(x, y, player, game);
         case BISHOP:
             return new Entities::Bishop(x, y, player);
         case KING:
-            return new Entities::King(x, y, player, false);
+            return new Entities::King(x, y, player, true);
         case KING_CASTLE:
             return new Entities::King(x, y, player);
         case KNIGHT:

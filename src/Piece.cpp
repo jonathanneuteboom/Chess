@@ -44,13 +44,9 @@ namespace Entities
         }
     }
 
-    void Piece::ExecuteMove(Chess *game, Move *move)
+    void Piece::MovePiece(Move *move)
     {
-        Piece *opponent = game->GetPiece(move->newSquare->x, move->newSquare->y);
-        if (opponent != nullptr)
-        {
-            game->RemovePiece(opponent);
-        }
-        game->MovePiece(move);
+        x = move->newSquare->x;
+        y = move->newSquare->y;
     }
 } // namespace Entities

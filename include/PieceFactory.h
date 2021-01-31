@@ -2,7 +2,6 @@
 
 #include "Player.h"
 #include "Piece.h"
-#include "Chess.h"
 
 namespace Factories
 {

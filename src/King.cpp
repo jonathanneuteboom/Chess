@@ -7,9 +7,9 @@
 namespace Entities
 {
 
-    King::King(int x, int y, Player player, bool canCastle) : Piece(x, y, player)
+    King::King(int x, int y, Player player, bool didKingMove) : Piece(x, y, player)
     {
-        this->canCastle = canCastle;
+        this->didKingMove = didKingMove;
     }
 
     void King::AppendMoves(Chess *game, std::vector<Move *> &potentialMoves)
@@ -36,29 +36,24 @@ namespace Entities
                 move = new Move(this, newX, newY, WALK);
             }
 
-            if (game->CanPlayerHitSquare(opponent, newX, newY))
+            if (game->CanPlayerCaptureSquare(opponent, newX, newY))
                 continue;
 
             potentialMoves.push_back(move);
         }
 
-        if (!canCastle)
-        {
+        if (!didKingMove)
             return;
-        }
 
-        if (IsCastlingPossible(QUEENSIDE_CASTLE, game))
+        for (int i = 0; i < 2; i++)
         {
-            Piece *rook = GetCastlingRook(QUEENSIDE_CASTLE, game);
-            int newX = GetNewKingXForCastling(QUEENSIDE_CASTLE, rook);
-            potentialMoves.push_back(new Move(this, newX, y, QUEENSIDE_CASTLE));
-        }
-
-        if (IsCastlingPossible(KINGSIDE_CASTLE, game))
-        {
-            Piece *rook = GetCastlingRook(KINGSIDE_CASTLE, game);
-            int newX = GetNewKingXForCastling(KINGSIDE_CASTLE, rook);
-            potentialMoves.push_back(new Move(this, newX, y, KINGSIDE_CASTLE));
+            MoveType castlingOption = castlingOptions[i];
+            if (IsCastlingPossible(castlingOption, game))
+            {
+                Piece *rook = GetCastlingRook(castlingOption, game);
+                int newX = GetNewKingXForCastling(castlingOption, rook);
+                potentialMoves.push_back(new Move(this, newX, y, castlingOption));
+            }
         }
     }
 
@@ -96,22 +91,20 @@ namespace Entities
                 return false;
         }
 
-        int playerIndex = game->GetPlayerIndex(player);
-
         int newKingX = GetNewKingXForCastling(move, rook);
+        Player opponent = game->GetOpponent(player);
         for (int newX = newKingX; newX != x; newX += dx)
         {
-            for (int i = 0; i < game->numberOfPieces[playerIndex]; i++)
+            if (game->CanPlayerCaptureSquare(opponent, newX, y))
             {
-                if (game->pieces[playerIndex][i]->CanCaptureSquare(newX, y, game))
-                    return false;
+                return false;
             }
         }
 
         return true;
     }
 
-    bool King::CanCaptureSquare(int x, int y, Chess *game)
+    bool King::CanPieceCaptureSquare(int x, int y, Chess *game)
     {
         (void)game;
 
@@ -123,34 +116,12 @@ namespace Entities
 
     PieceType King::GetType()
     {
-        return canCastle ? KING_CASTLE : KING;
+        return didKingMove ? KING_CASTLE : KING;
     }
 
-    void King::ExecuteMove(Chess *game, Move *move)
+    void King::MovePiece(Move *move)
     {
-        switch (move->moveType)
-        {
-        case KINGSIDE_CASTLE:
-        {
-            game->MovePiece(move);
-
-            Piece *rook = GetCastlingRook(KINGSIDE_CASTLE, game);
-            Move rookMove = Move(rook, move->newSquare->x - 1, y, WALK);
-            game->MovePiece(&rookMove);
-            break;
-        }
-        case QUEENSIDE_CASTLE:
-        {
-            game->MovePiece(move);
-
-            Piece *rook = GetCastlingRook(QUEENSIDE_CASTLE, game);
-            Move rookMove = Move(rook, move->newSquare->x + 1, y, WALK);
-            game->MovePiece(&rookMove);
-            break;
-        }
-        default:
-            Piece::ExecuteMove(game, move);
-            break;
-        }
+        didKingMove = true;
+        Piece::MovePiece(move);
     }
 } // namespace Entities

@@ -15,18 +15,18 @@ namespace Entities
         AppendMovesWithlinearDirections(game, directions, 8, potentialMoves);
     }
 
-    bool Queen::CanCaptureSquare(int x, int y, Chess *game)
+    bool Queen::CanPieceCaptureSquare(int x, int y, Chess *game)
     {
         int dx = abs(this->x - x);
         int dy = abs(this->y - x);
         if (dx == dy)
         {
-            return Bishop::CanCaptureSquare(this->x, this->y, x, y, game);
+            return Bishop::CanPieceCaptureSquare(this->x, this->y, x, y, game);
         }
 
         if (this->x == x || this->y == y)
         {
-            return Rook::CanCaptureSquare(this->x, this->y, x, y, game);
+            return Rook::CanPieceCaptureSquare(this->x, this->y, x, y, game);
         }
 
         return false;
