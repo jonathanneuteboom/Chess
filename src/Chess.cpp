@@ -20,7 +20,7 @@ namespace Entities
 
         this->numberOfSquares = width * height;
         board = new Piece *[width * height];
-        memset(board, 0, sizeof(board[0][0]) * width * height);
+        memset(board, 0, sizeof(board[0]) * width * height);
     }
 
     Chess::~Chess()
@@ -174,7 +174,8 @@ namespace Entities
         int pieceCounter = 0;
         for (int i = 0; i < numberOfPieces[playerIndex]; i++)
         {
-            if (pieces[playerIndex][i]->x == piece->x && pieces[playerIndex][i]->y == piece->y)
+            if (pieces[playerIndex][i]->x == piece->x &&
+                pieces[playerIndex][i]->y == piece->y)
             {
                 SetPiece(nullptr, piece->x, piece->y);
                 continue;
