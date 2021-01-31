@@ -46,6 +46,14 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp",
-        "cstring": "cpp"
+        "cstring": "cpp",
+        "any": "cpp",
+        "chrono": "cpp",
+        "forward_list": "cpp",
+        "unordered_set": "cpp",
+        "ratio": "cpp",
+        "set": "cpp",
+        "iomanip": "cpp",
+        "variant": "cpp"
     }
 }

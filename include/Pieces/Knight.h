@@ -6,7 +6,7 @@ namespace Entities
 {
     class Knight : public Piece
     {
-        const int directions[8][2] = {
+        const int moves[8][2] = {
             {1, 2},
             {2, 1},
             {2, -1},

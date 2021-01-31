@@ -22,11 +22,11 @@ namespace Entities
         Piece **pieces[2];
         int numberOfPieces[2];
 
-        Chess(int width, int height, int currentRound = 1);
+        Chess(int width, int height, Player currentPlayer = WHITE);
         ~Chess();
 
         int GetNumberOfPieces(char pieces[]);
-        void SetPieces(char pieces[], Player player, int start, int direction);
+        void SetPieces(char pieces[], Player player);
         void InitBoard(char white[], char black[]);
         void PrintBoard();
         int GetLetterOfPiece(Piece *);
@@ -35,6 +35,7 @@ namespace Entities
         bool IsSquareFree(int x, int y);
         Piece *GetPiece(int x, int y);
         void SetPiece(Piece *piece, int x, int y);
+        void AppendMoves(std::vector<Move *> &moves);
         void ExecuteMove(Move *move);
         void AddPiece(Player player, PieceType pieceType, int x, int y);
         void RemovePiece(int x, int y);

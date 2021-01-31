@@ -22,7 +22,7 @@ namespace Factories
         case PAWN:
             return new Entities::Pawn(x, y, player, game);
         case PAWN_EN_PASSANT:
-            return new Entities::Pawn(x, y, player, game);
+            return new Entities::Pawn(x, y, player, game, game->GetCurrentRound());
         case BISHOP:
             return new Entities::Bishop(x, y, player);
         case KING:

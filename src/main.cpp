@@ -25,11 +25,8 @@ int main()
 	{
 		moves.clear();
 		chess.PrintBoard();
-		int playerIndex = chess.GetPlayerIndex(chess.currentPlayer);
-		for (int i = 0; i < chess.numberOfPieces[playerIndex]; i++)
-		{
-			chess.pieces[playerIndex][i]->AppendMoves(&chess, moves);
-		}
+		chess.AppendMoves(moves);
+		
 
 		for (int i = 0; i < (int)moves.size(); i++)
 		{

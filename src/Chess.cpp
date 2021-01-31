@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <vector>
 
 #include "Chess.h"
 #include "PieceType.h"
@@ -10,13 +11,13 @@ using namespace Factories;
 
 namespace Entities
 {
-    Chess::Chess(int width, int height, int currentRound)
+    Chess::Chess(int width, int height, Player currentPlayer)
     {
-        this->currentRound = currentRound;
-        this->currentPlayer = Player::WHITE;
-
+        this->currentPlayer = currentPlayer;
         this->width = width;
         this->height = height;
+
+        this->currentRound = 1;
 
         this->numberOfSquares = width * height;
         board = new Piece *[width * height];
@@ -35,12 +36,24 @@ namespace Entities
         delete board;
     }
 
+    void Chess::AppendMoves(std::vector<Move *> &moves)
+    {
+        int playerIndex = GetPlayerIndex(currentPlayer);
+        for (int i = 0; i < numberOfPieces[playerIndex]; i++)
+        {
+            pieces[playerIndex][i]->AppendMoves(this, moves);
+        }
+    }
+
     int Chess::GetNumberOfPieces(char pieces[])
     {
+        if (pieces == NULL)
+            return 0;
+
         int number = 0;
         for (char *letter = pieces; *letter != '\0'; letter++)
         {
-            if (*letter == ' ')
+            if (*letter == ' ' || *letter == '-')
                 continue;
 
             number++;
@@ -48,18 +61,39 @@ namespace Entities
         return number;
     }
 
-    void Chess::SetPieces(char pieces[], Player player, int currentField, int direction)
+    void Chess::SetPieces(char characters[], Player player)
     {
+        if (characters == NULL)
+            return;
+
+        int playerIndex = GetPlayerIndex(player);
+        numberOfPieces[playerIndex] = GetNumberOfPieces(characters);
+        pieces[playerIndex] = new Piece *[numberOfPieces[playerIndex]];
+
         int pieceNumber = 0;
-        for (char *letter = pieces; *letter != '\0'; letter++)
+        int currentField = player == WHITE ? 0 : numberOfSquares - 1;
+        int direction = player == WHITE ? 1 : -1;
+
+        for (char *letter = characters; *letter != '\0'; letter++)
         {
+            if (*letter == ' ')
+            {
+                currentField += direction;
+                continue;
+            }
+            if (*letter == '-')
+            {
+                currentField += direction * this->width;
+                continue;
+            }
+
             int x = currentField % this->width;
             int y = currentField / this->width;
 
             Piece *piece = PieceFactory::CreatePiece(player, *letter, x, y, this);
 
             int playerIndex = GetPlayerIndex(player);
-            this->pieces[playerIndex][pieceNumber++] = piece;
+            pieces[playerIndex][pieceNumber++] = piece;
             SetPiece(piece, x, y);
 
             currentField += direction;
@@ -89,21 +123,15 @@ namespace Entities
 
     void Chess::InitBoard(char whitePieces[], char blackPieces[])
     {
-        int whitePlayer = 0;
-        numberOfPieces[whitePlayer] = GetNumberOfPieces(whitePieces);
-        pieces[whitePlayer] = new Piece *[numberOfPieces[whitePlayer]];
+        SetPieces(whitePieces, WHITE);
+        SetPieces(blackPieces, BLACK);
 
-        int blackPlayer = 1;
-        numberOfPieces[blackPlayer] = GetNumberOfPieces(blackPieces);
-        pieces[blackPlayer] = new Piece *[numberOfPieces[blackPlayer]];
-
+        int whitePlayer = GetPlayerIndex(WHITE);
+        int blackPlayer = GetPlayerIndex(BLACK);
         if (numberOfPieces[whitePlayer] + numberOfPieces[blackPlayer] > numberOfSquares)
         {
             throw "te veel stukken";
         }
-
-        SetPieces(whitePieces, Player::WHITE, 0, 1);
-        SetPieces(blackPieces, Player::BLACK, numberOfSquares - 1, -1);
     }
 
     void Chess::PrintBoard()

@@ -22,8 +22,8 @@ namespace Entities
         Move *newMove;
         for (int i = 0; i < 8; i++)
         {
-            int newX = x + directions[i][0];
-            int newY = y + directions[i][1];
+            int newX = x + moves[i][0];
+            int newY = y + moves[i][1];
             if (game->IsSquareOusideBounds(newX, newY))
                 continue;
 

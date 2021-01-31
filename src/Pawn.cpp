@@ -31,7 +31,7 @@ namespace Entities
     {
         Move *newMove;
 
-        bool lastRow = player == WHITE ? game->height - 1 : 0;
+        int lastRow = player == WHITE ? game->height - 1 : 0;
         if (lastRow != newY)
         {
             newMove = new Move(this, newX, newY, WALK);
