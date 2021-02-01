@@ -2,7 +2,6 @@
 
 #include "Piece.h"
 #include "MoveType.h"
-#include "Square.h"
 
 namespace Entities
 {
@@ -11,10 +10,11 @@ namespace Entities
     {
     public:
         Piece *piece;
-        Square *newSquare;
+        int newX;
+        int newY;
         MoveType moveType;
 
-        Move(Piece *piece, int x, int y, MoveType moveType);
+        Move(Piece *piece, int newX, int newY, MoveType moveType);
         void Print();
     };
 } // namespace Entities

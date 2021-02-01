@@ -121,37 +121,54 @@ namespace Entities
         AppendEnPassantMoves(direction, potentialMoves, game);
     }
 
+    PieceType Pawn::GetPromotedPieceType(MoveType move)
+    {
+        switch (move)
+        {
+        case QUEEN_PROMOTION:
+            return QUEEN;
+        case ROOK_PROMOTION:
+            return ROOK;
+        case KNIGHT_PROMOTION:
+            return KNIGHT;
+        case BISHOP_PROMOTION:
+            return BISHOP;
+        default:
+            throw;
+        }
+    }
+
     void Pawn::ExecuteMove(Chess *game, Move *move)
     {
         didPawnMove = true;
         switch (move->moveType)
         {
-        case QUEEN_PROMOTION:
-        case ROOK_PROMOTION:
-        case KNIGHT_PROMOTION:
-        case BISHOP_PROMOTION:
         case WALK:
         {
-            int stepLength = abs(y - move->newSquare->y);
+            int stepLength = abs(y - move->newY);
             if (stepLength == 2)
             {
                 doubleSquareMoveRound = game->currentRound;
             }
-
-            Piece *piece = game->GetPiece(move->newSquare->x, move->newSquare->y);
-            if (piece != nullptr)
-            {
-                game->RemovePiece(piece);
-            }
-            game->MovePiece(move);
-            return;
+            Piece::ExecuteMove(game, move);
+            break;
+        }
+        case QUEEN_PROMOTION:
+        case ROOK_PROMOTION:
+        case KNIGHT_PROMOTION:
+        case BISHOP_PROMOTION:
+        {
+            PieceType newPieceType = GetPromotedPieceType(move->moveType);
+            game->AddPiece(player, newPieceType, move->newX, move->newY);
+            game->RemovePiece(this);
+            break;
         }
         case EN_PASSANT_CAPTURE:
         {
-            Piece *opposingPawn = game->GetPiece(move->newSquare->x, move->piece->x);
+            Piece *opposingPawn = game->GetPiece(move->newX, move->piece->y);
             game->RemovePiece(opposingPawn);
-            game->MovePiece(move);
-            return;
+            Piece::ExecuteMove(game, move);
+            break;
         }
         default:
             break;

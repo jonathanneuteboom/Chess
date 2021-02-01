@@ -2,6 +2,7 @@
 #include <vector>
 #include "Chess.h"
 #include "Piece.h"
+#include "BoardFactory.h"
 
 using namespace Entities;
 
@@ -16,9 +17,9 @@ int leesGetal()
 int main()
 {
 	Chess chess(4, 4);
-	char white[] = "NQKRPPPP";
-	char black[] = "RKQNPPPP";
-	chess.InitBoard(white, black);
+	string white = "NQKRPPPP";
+	string black = "RKQNPPPP";
+	Factories::BoardFactory::CreateBoard(&chess, white, black);
 
 	std::vector<Move *> moves;
 	while (true)
@@ -26,7 +27,6 @@ int main()
 		moves.clear();
 		chess.PrintBoard();
 		chess.AppendMoves(moves);
-		
 
 		for (int i = 0; i < (int)moves.size(); i++)
 		{

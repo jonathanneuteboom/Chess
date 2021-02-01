@@ -18,7 +18,7 @@ namespace Entities
     bool Queen::CanPieceCaptureSquare(int x, int y, Chess *game)
     {
         int dx = abs(this->x - x);
-        int dy = abs(this->y - x);
+        int dy = abs(this->y - y);
         if (dx == dy)
         {
             return Bishop::CanPieceCaptureSquare(this->x, this->y, x, y, game);

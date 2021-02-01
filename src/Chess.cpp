@@ -32,7 +32,7 @@ namespace Entities
                 RemovePiece(pieces[i][0]);
             }
         }
-        delete board;
+        delete[] board;
     }
 
     void Chess::AppendMoves(std::vector<Move *> &moves)
@@ -41,55 +41,6 @@ namespace Entities
         for (int i = 0; i < numberOfPieces[playerIndex]; i++)
         {
             pieces[playerIndex][i]->AppendMoves(this, moves);
-        }
-    }
-
-    int Chess::GetNumberOfPieces(char pieces[])
-    {
-        if (pieces == NULL)
-            return 0;
-
-        int number = 0;
-        for (char *letter = pieces; *letter != '\0'; letter++)
-        {
-            if (*letter == ' ' || *letter == '-')
-                continue;
-
-            number++;
-        }
-        return number;
-    }
-
-    void Chess::SetPieces(char characters[], Player player)
-    {
-        if (characters == NULL)
-            return;
-
-        int playerIndex = GetPlayerIndex(player);
-        pieces[playerIndex] = new Piece *[numberOfPieces[playerIndex]];
-
-        int pieceCounter = 0;
-        int currentField = player == WHITE ? 0 : width * height - 1;
-        int direction = player == WHITE ? 1 : -1;
-
-        for (char *letter = characters; *letter != '\0'; letter++)
-        {
-            if (*letter == ' ')
-            {
-                currentField += direction;
-                continue;
-            }
-            if (*letter == '-')
-            {
-                currentField += direction * this->width;
-                continue;
-            }
-
-            int x = currentField % this->width;
-            int y = currentField / this->width;
-            AddPiece(player, (PieceType)*letter, x, y);
-
-            currentField += direction;
         }
     }
 
@@ -112,20 +63,6 @@ namespace Entities
     int Chess::GetPlayerIndex(Player player)
     {
         return player == WHITE ? 0 : 1;
-    }
-
-    void Chess::InitBoard(char whitePieces[], char blackPieces[])
-    {
-        SetPieces(whitePieces, WHITE);
-        SetPieces(blackPieces, BLACK);
-
-        int whitePlayer = GetPlayerIndex(WHITE);
-        int blackPlayer = GetPlayerIndex(BLACK);
-        int numberOfSquares = width * height;
-        if (numberOfPieces[whitePlayer] + numberOfPieces[blackPlayer] > numberOfSquares)
-        {
-            throw "te veel stukken";
-        }
     }
 
     void Chess::PrintBoard()
@@ -197,20 +134,17 @@ namespace Entities
             newPieces[i] = pieces[playerIndex][i];
         }
 
+        if (pieces[playerIndex] != NULL)
+        {
+            delete pieces[playerIndex];
+        }
+        pieces[playerIndex] = newPieces;
+
         Piece *piece = PieceFactory::CreatePiece(player, pieceType, x, y, this);
         SetPiece(piece, x, y);
+
         int newPieceIndex = numberOfPieces[playerIndex]++;
         pieces[playerIndex][newPieceIndex] = piece;
-    }
-
-    void Chess::MovePiece(Move *move)
-    {
-        move->piece->MovePiece(move);
-
-        SetPiece(nullptr, move->piece->x, move->piece->y);
-        SetPiece(move->piece, move->newSquare->x, move->newSquare->y);
-        move->piece->x = move->newSquare->x;
-        move->piece->y = move->newSquare->y;
     }
 
     void Chess::RemovePiece(Piece *piece)
@@ -238,77 +172,9 @@ namespace Entities
         numberOfPieces[playerIndex]--;
     }
 
-    PieceType Chess::GetPromotedPieceType(MoveType move)
-    {
-        switch (move)
-        {
-        case QUEEN_PROMOTION:
-            return QUEEN;
-        case ROOK_PROMOTION:
-            return ROOK;
-        case KNIGHT_PROMOTION:
-            return KNIGHT;
-        case BISHOP_PROMOTION:
-            return BISHOP;
-        default:
-            throw;
-        }
-    }
-
     void Chess::ExecuteMove(Move *move)
     {
-        switch (move->moveType)
-        {
-        case WALK:
-        {
-            Piece *piece = GetPiece(move->newSquare->x, move->newSquare->y);
-            if (piece != nullptr)
-            {
-                RemovePiece(piece);
-            }
-            MovePiece(move);
-            break;
-        }
-        case QUEEN_PROMOTION:
-        case ROOK_PROMOTION:
-        case KNIGHT_PROMOTION:
-        case BISHOP_PROMOTION:
-        {
-            PieceType newPieceType = GetPromotedPieceType(move->moveType);
-            RemovePiece(move->piece);
-            AddPiece(currentPlayer, newPieceType, move->newSquare->x, move->newSquare->y);
-            break;
-        }
-        case EN_PASSANT_CAPTURE:
-        {
-            Piece *opposingPawn = GetPiece(move->newSquare->x, move->piece->x);
-            RemovePiece(opposingPawn);
-            MovePiece(move);
-            break;
-        }
-        case KINGSIDE_CASTLE:
-        {
-            King *king = (King *)move->piece;
-            Piece *rook = king->GetCastlingRook(KINGSIDE_CASTLE, this);
-            Move rookMove = Move(rook, move->newSquare->x - 1, move->piece->y, WALK);
-
-            MovePiece(move);
-            MovePiece(&rookMove);
-            break;
-        }
-        case QUEENSIDE_CASTLE:
-        {
-            King *king = (King *)move->piece;
-            Piece *rook = king->GetCastlingRook(QUEENSIDE_CASTLE, this);
-            Move rookMove = Move(rook, move->newSquare->x + 1, move->piece->y, WALK);
-
-            MovePiece(move);
-            MovePiece(&rookMove);
-            break;
-        }
-        default:
-            throw;
-        }
+        move->piece->ExecuteMove(this, move);
 
         currentPlayer = GetOpponent(currentPlayer);
         currentRound++;

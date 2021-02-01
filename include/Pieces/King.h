@@ -29,6 +29,6 @@ namespace Entities
         bool IsCastlingPossible(MoveType move, Chess *game);
         virtual bool CanPieceCaptureSquare(int x, int y, Chess *game);
         virtual PieceType GetType();
-        virtual void MovePiece(Move *move);
+        virtual void ExecuteMove(Chess *game, Move *move);
     };
 } // namespace Entities

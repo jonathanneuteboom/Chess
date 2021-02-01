@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "Chess.h"
+#include "BoardFactory.h"
 
 using namespace Entities;
 
@@ -8,7 +9,7 @@ TEST(BishopTests, Possibilites1)
     // arrange
     std::vector<Move *> moves;
     Chess c = Chess(5, 5);
-    c.InitBoard((char *)"- p p   b   p p", NULL);
+    Factories::BoardFactory::CreateBoard(&c, "- p p   b   p p", "");
     c.PrintBoard();
 
     // act
@@ -23,7 +24,7 @@ TEST(BishopTests, Possibilites2)
     // arrange
     std::vector<Move *> moves;
     Chess c = Chess(5, 5);
-    c.InitBoard((char *)"--  b", NULL);
+    Factories::BoardFactory::CreateBoard(&c, "--  b", "");
     c.PrintBoard();
 
     // act
@@ -38,7 +39,7 @@ TEST(BishopTests, Possibilites3)
     // arrange
     std::vector<Move *> moves;
     Chess c = Chess(5, 5);
-    c.InitBoard((char *)"--  b", (char *)"- p p - p p");
+    Factories::BoardFactory::CreateBoard(&c, "--  b", "- p p - p p");
     c.PrintBoard();
 
     // act

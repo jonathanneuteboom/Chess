@@ -22,23 +22,16 @@ namespace Entities
             int newX = x + directions[i][0];
             int newY = y + directions[i][1];
             if (game->IsSquareOusideBounds(newX, newY))
-                break;
+                continue;
 
-            if (!game->IsSquareFree(newX, newY))
-            {
-                if (game->GetPiece(newX, newY)->player == player)
-                    continue;
-
-                move = new Move(this, newX, newY, WALK);
-            }
-            else
-            {
-                move = new Move(this, newX, newY, WALK);
-            }
+            Piece *piece = game->GetPiece(newX, newY);
+            if (piece != nullptr && piece->player == player)
+                continue;
 
             if (game->CanPlayerCaptureSquare(opponent, newX, newY))
                 continue;
 
+            move = new Move(this, newX, newY, WALK);
             potentialMoves.push_back(move);
         }
 
@@ -52,7 +45,8 @@ namespace Entities
             {
                 Piece *rook = GetCastlingRook(castlingOption, game);
                 int newX = GetNewKingXForCastling(castlingOption, rook);
-                potentialMoves.push_back(new Move(this, newX, y, castlingOption));
+                move = new Move(this, newX, y, castlingOption);
+                potentialMoves.push_back(move);
             }
         }
     }
@@ -116,12 +110,39 @@ namespace Entities
 
     PieceType King::GetType()
     {
-        return didKingMove ? KING_CASTLE : KING;
+        return didKingMove ? KING : KING_CASTLE;
     }
 
-    void King::MovePiece(Move *move)
+    void King::ExecuteMove(Chess *game, Move *move)
     {
         didKingMove = true;
-        Piece::MovePiece(move);
+        switch (move->moveType)
+        {
+        case WALK:
+            Piece::ExecuteMove(game, move);
+            break;
+        case KINGSIDE_CASTLE:
+        {
+            King *king = (King *)move->piece;
+            Piece *rook = king->GetCastlingRook(KINGSIDE_CASTLE, game);
+            Move rookMove = Move(rook, move->newX - 1, move->piece->y, WALK);
+
+            Piece::ExecuteMove(game, move);
+            Piece::ExecuteMove(game, &rookMove);
+            break;
+        }
+        case QUEENSIDE_CASTLE:
+        {
+            King *king = (King *)move->piece;
+            Piece *rook = king->GetCastlingRook(QUEENSIDE_CASTLE, game);
+            Move rookMove = Move(rook, move->newX + 1, move->piece->y, WALK);
+
+            Piece::ExecuteMove(game, move);
+            Piece::ExecuteMove(game, &rookMove);
+            break;
+        }
+        default:
+            throw;
+        }
     }
 } // namespace Entities
