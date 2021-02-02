@@ -87,12 +87,15 @@ namespace Entities
         {
             int newX = enPassantPawns[i][0];
             int newY = enPassantPawns[i][1];
-
+            if (game->IsSquareOusideBounds(newX, newY))
+                continue;
+                
             Piece *piece = game->GetPiece(newX, newY);
             if (piece == nullptr)
                 continue;
 
-            if (piece->GetType() == PieceType::PAWN_EN_PASSANT)
+            if (piece->GetType() != PieceType::PAWN_EN_PASSANT ||
+                piece->player == player)
                 continue;
 
             Move *newMove = new Move(this, newX, newY + direction, EN_PASSANT_CAPTURE);

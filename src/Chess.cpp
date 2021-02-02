@@ -113,9 +113,6 @@ namespace Entities
 
     Piece *Chess::GetPiece(int x, int y)
     {
-        if (IsSquareOusideBounds(x, y))
-            return nullptr;
-
         return board[x + y * width];
     }
 

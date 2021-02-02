@@ -4,7 +4,7 @@
 
 using namespace Entities;
 
-TEST(QueenTests, Possibilities)
+TEST(QueenTests, Possibilities1)
 {
     // arrange
     std::vector<Move *> moves;
@@ -49,5 +49,32 @@ TEST(QueenTests, Possibilities2)
     {
         bool canCaptureSquare = c.pieces[c.GetPlayerIndex(WHITE)][0]->CanPieceCaptureSquare(squares[i][0], squares[i][1], &c);
         ASSERT_EQ(canCaptureSquare, true);
+    }
+}
+
+TEST(QueenTests, Possibilites3)
+{
+    // arrange
+    std::vector<Move *> moves;
+    Chess c = Chess(5, 5);
+    Factories::BoardFactory::CreateBoard(&c, "--  Q", "");
+    c.PrintBoard();
+
+    bool squares[5][5] = {
+        {1, 0, 1, 0, 1},
+        {0, 1, 1, 1, 0},
+        {1, 1, 0, 1, 1},
+        {0, 1, 1, 1, 0},
+        {1, 0, 1, 0, 1}};
+
+    // assert
+    for (int x = 0; x < 5; x++)
+    {
+        for (int y = 0; y < 5; y++)
+        {
+            bool canCaptureSquare = c.pieces[c.GetPlayerIndex(WHITE)][0]->CanPieceCaptureSquare(x, y, &c);
+            bool shouldCaptureSquare = squares[x][y];
+            ASSERT_EQ(canCaptureSquare, shouldCaptureSquare);
+        }
     }
 }

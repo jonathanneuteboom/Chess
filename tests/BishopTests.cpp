@@ -27,11 +27,23 @@ TEST(BishopTests, Possibilites2)
     Factories::BoardFactory::CreateBoard(&c, "--  B", "");
     c.PrintBoard();
 
-    // act
-    c.pieces[c.GetPlayerIndex(WHITE)][0]->AppendMoves(&c, moves);
+    bool squares[5][5] = {
+        {1, 0, 0, 0, 1},
+        {0, 1, 0, 1, 0},
+        {0, 0, 0, 0, 0},
+        {0, 1, 0, 1, 0},
+        {1, 0, 0, 0, 1}};
 
     // assert
-    ASSERT_EQ(moves.size(), 8);
+    for (int x = 0; x < 5; x++)
+    {
+        for (int y = 0; y < 5; y++)
+        {
+            bool canCaptureSquare = c.pieces[c.GetPlayerIndex(WHITE)][0]->CanPieceCaptureSquare(x, y, &c);
+            bool shouldCaptureSquare = squares[x][y];
+            ASSERT_EQ(canCaptureSquare, shouldCaptureSquare);
+        }
+    }
 }
 
 TEST(BishopTests, Possibilites3)

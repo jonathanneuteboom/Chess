@@ -59,6 +59,33 @@ TEST(KnightTests, AllMoves)
     ASSERT_EQ(stap->moveType, WALK);
 }
 
+TEST(KnightTests, Possibilites)
+{
+    // arrange
+    std::vector<Move *> moves;
+    Chess c = Chess(5, 5);
+    Factories::BoardFactory::CreateBoard(&c, "--  N", "");
+    c.PrintBoard();
+
+    bool squares[5][5] = {
+        {0, 1, 0, 1, 0},
+        {1, 0, 0, 0, 1},
+        {0, 0, 0, 0, 0},
+        {1, 0, 0, 0, 1},
+        {0, 1, 0, 1, 0}};
+
+    // assert
+    for (int x = 0; x < 5; x++)
+    {
+        for (int y = 0; y < 5; y++)
+        {
+            bool canCaptureSquare = c.pieces[c.GetPlayerIndex(WHITE)][0]->CanPieceCaptureSquare(x, y, &c);
+            bool shouldCaptureSquare = squares[x][y];
+            ASSERT_EQ(canCaptureSquare, shouldCaptureSquare);
+        }
+    }
+}
+
 TEST(KnightTests, CantHitItself)
 {
     // arrange

@@ -25,6 +25,9 @@ namespace Entities
     {
         if (rookX == x)
         {
+            if (rookY == y)
+                return false;
+
             int yRichting = rookY < y ? 1 : -1;
             int sqauresInBetween = abs(rookY - y) - 1;
             for (int i = 1; i <= sqauresInBetween; i++)

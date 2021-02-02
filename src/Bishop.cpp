@@ -23,7 +23,8 @@ namespace Entities
     {
         int dx = x - bishopX;
         int dy = y - bishopY;
-        if (abs(dx) != abs(dy))
+        if (abs(dx) != abs(dy) ||
+            (dx == 0 && dy == 0))
             return false;
 
         int squaresInBetween = abs(dx) - 1;
