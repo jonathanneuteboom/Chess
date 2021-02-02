@@ -10,7 +10,7 @@ TEST(KnightTests, AllMoves)
     // arrange
     std::vector<Move *> moves;
     Chess c = Chess(5, 5);
-    Factories::BoardFactory::CreateBoard(&c, "--  n", "");
+    Factories::BoardFactory::CreateBoard(&c, "--  N", "");
 
     // act
     c.AppendMoves(moves);
@@ -64,7 +64,7 @@ TEST(KnightTests, CantHitItself)
     // arrange
     std::vector<Move *> moves;
     Chess c = Chess(5, 5);
-    Factories::BoardFactory::CreateBoard(&c, " p       p  n  p       p", "");
+    Factories::BoardFactory::CreateBoard(&c, " p       p  N  p       p", "");
     c.PrintBoard();
 
     // act

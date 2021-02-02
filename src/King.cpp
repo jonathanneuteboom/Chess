@@ -35,7 +35,7 @@ namespace Entities
             potentialMoves.push_back(move);
         }
 
-        if (!didKingMove)
+        if (didKingMove)
             return;
 
         for (int i = 0; i < 2; i++)
@@ -53,8 +53,8 @@ namespace Entities
 
     int King::GetNewKingXForCastling(MoveType moveType, Piece *rook)
     {
-        int d = moveType == QUEENSIDE_CASTLE ? x - rook->x : rook->x - x;
-        return (d + 1) / 2;
+        int distance = (abs(x - rook->x) + 1) / 2;
+        return moveType == QUEENSIDE_CASTLE ? x - distance : x + distance;
     }
 
     Piece *King::GetCastlingRook(MoveType move, Chess *game)
@@ -78,18 +78,19 @@ namespace Entities
             return false;
 
         int dx = rook->x < x ? 1 : -1;
-        for (int newX = rook->x + dx; newX != x; newX += dx)
+        int xInBetween = rook->x + dx;
+        for (; xInBetween != x; xInBetween += dx)
         {
-            Piece *piece = game->GetPiece(newX, y);
+            Piece *piece = game->GetPiece(xInBetween, y);
             if (piece != nullptr)
                 return false;
         }
 
         int newKingX = GetNewKingXForCastling(move, rook);
         Player opponent = game->GetOpponent(player);
-        for (int newX = newKingX; newX != x; newX += dx)
+        for (int xInBetween = newKingX; xInBetween != x; xInBetween += dx)
         {
-            if (game->CanPlayerCaptureSquare(opponent, newX, y))
+            if (game->CanPlayerCaptureSquare(opponent, xInBetween, y))
             {
                 return false;
             }

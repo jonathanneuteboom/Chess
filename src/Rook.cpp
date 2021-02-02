@@ -33,9 +33,10 @@ namespace Entities
                 if (game->GetPiece(x, newY))
                     return false;
             }
+            return true;
         }
 
-        if (rookY == y)
+        else if (rookY == y)
         {
             int xRichting = rookX < x ? 1 : -1;
             int sqauresInBetween = abs(rookX - x) - 1;
@@ -45,9 +46,10 @@ namespace Entities
                 if (game->GetPiece(newX, y))
                     return false;
             }
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     PieceType Rook::GetType()

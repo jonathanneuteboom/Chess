@@ -7,11 +7,11 @@ namespace Entities
         EMPTY = ' ',
         PAWN = 'p',
         PAWN_EN_PASSANT = 'P',
-        KNIGHT = 'n',
-        BISHOP = 'b',
+        KNIGHT = 'N',
+        BISHOP = 'B',
         ROOK = 'r',
         ROOK_CASTLE = 'R',
-        QUEEN = 'q',
+        QUEEN = 'Q',
         KING = 'k',
         KING_CASTLE = 'K'
     };

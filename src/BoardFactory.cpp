@@ -9,6 +9,8 @@ namespace Factories
     {
         if (pieces.empty())
             return;
+        if (game->width * game->height < (int)pieces.size())
+            throw;
 
         int currentField = player == WHITE ? 0 : game->width * game->height - 1;
         int direction = player == WHITE ? 1 : -1;

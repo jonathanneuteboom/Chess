@@ -9,7 +9,7 @@ TEST(BishopTests, Possibilites1)
     // arrange
     std::vector<Move *> moves;
     Chess c = Chess(5, 5);
-    Factories::BoardFactory::CreateBoard(&c, "- p p   b   p p", "");
+    Factories::BoardFactory::CreateBoard(&c, "- p p   B   p p", "");
     c.PrintBoard();
 
     // act
@@ -24,7 +24,7 @@ TEST(BishopTests, Possibilites2)
     // arrange
     std::vector<Move *> moves;
     Chess c = Chess(5, 5);
-    Factories::BoardFactory::CreateBoard(&c, "--  b", "");
+    Factories::BoardFactory::CreateBoard(&c, "--  B", "");
     c.PrintBoard();
 
     // act
@@ -39,7 +39,7 @@ TEST(BishopTests, Possibilites3)
     // arrange
     std::vector<Move *> moves;
     Chess c = Chess(5, 5);
-    Factories::BoardFactory::CreateBoard(&c, "--  b", "- p p - p p");
+    Factories::BoardFactory::CreateBoard(&c, "--  B", "- p p - p p");
     c.PrintBoard();
 
     // act

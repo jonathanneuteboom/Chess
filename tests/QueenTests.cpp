@@ -9,7 +9,7 @@ TEST(QueenTests, Possibilities)
     // arrange
     std::vector<Move *> moves;
     Chess c = Chess(5, 5);
-    Factories::BoardFactory::CreateBoard(&c, "--  q", "");
+    Factories::BoardFactory::CreateBoard(&c, "--  Q", "");
     c.PrintBoard();
 
     // act
@@ -24,7 +24,7 @@ TEST(QueenTests, Possibilities2)
     // arrange
     std::vector<Move *> moves;
     Chess c = Chess(5, 5);
-    Factories::BoardFactory::CreateBoard(&c, "--  q", "");
+    Factories::BoardFactory::CreateBoard(&c, "--  Q", "");
     c.PrintBoard();
     int squares[16][2] = {
         {0, 0},

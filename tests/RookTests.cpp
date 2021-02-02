@@ -9,7 +9,7 @@ TEST(RookTests, Possibilities)
     // arrange
     std::vector<Move *> moves;
     Chess c = Chess(5, 5);
-    Factories::BoardFactory::CreateBoard(&c, "r", "");
+    Factories::BoardFactory::CreateBoard(&c, "R", "");
     c.PrintBoard();
 
     // act
@@ -24,7 +24,7 @@ TEST(RookTests, Possibilities2)
     // arrange
     std::vector<Move *> moves;
     Chess c = Chess(2, 2);
-    Factories::BoardFactory::CreateBoard(&c, "r", " pp");
+    Factories::BoardFactory::CreateBoard(&c, "R", " pp");
     c.PrintBoard();
 
     // act

@@ -22,9 +22,10 @@ namespace Entities
     {
         (void)game;
 
-        int dy = player == WHITE ? 1 : -1;
-        return y + dy == this->y &&
-               std::abs(this->x - x) == 1;
+        int yRichting = player == WHITE ? 1 : -1;
+        int dx = std::abs(this->x - x);
+        return this->y + yRichting == y &&
+               dx == 1;
     }
 
     void Pawn::AppendWalkingMoves(int newX, int newY, std::vector<Move *> &potentialMoves, Chess *game)
