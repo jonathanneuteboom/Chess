@@ -35,6 +35,26 @@ namespace Entities
         delete[] board;
     }
 
+    Chess *Chess::Clone()
+    {
+        Chess *clone = new Chess(width, height, currentPlayer);
+        clone->currentRound = currentRound;
+
+        for (int player = 0; player < 2; player++)
+        {
+            clone->pieces[player] = new Piece *[numberOfPieces[player]];
+            for (int i = 0; i < numberOfPieces[player]; i++)
+            {
+                Piece *piece = pieces[player][i];
+                Piece *newPiece = PieceFactory::CreatePiece((Player)player, piece->GetType(), piece->x, piece->y, this);
+                clone->pieces[player][i] = newPiece;
+                SetPiece(newPiece, newPiece->x, newPiece->y);
+            }
+        }
+
+        return clone;
+    }
+
     void Chess::AppendMoves(std::vector<Move *> &moves)
     {
         for (int i = 0; i < numberOfPieces[currentPlayer]; i++)
@@ -178,8 +198,9 @@ namespace Entities
 
     int Chess::GetNumberOfMoves(Player player)
     {
-        std::vector<Move*> moves;
-        for (int i = 0; i < numberOfPieces[player]; i++){
+        std::vector<Move *> moves;
+        for (int i = 0; i < numberOfPieces[player]; i++)
+        {
             pieces[player][i]->AppendMoves(this, moves);
         }
         return moves.size();

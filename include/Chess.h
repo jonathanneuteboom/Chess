@@ -25,6 +25,8 @@ namespace Entities
         Chess(int width, int height, Player currentPlayer = WHITE);
         ~Chess();
 
+        Chess *Clone();
+
         void PrintBoard();
         int GetCurrentRound();
 
