@@ -204,6 +204,53 @@ TEST(KingTests, ValidCastling)
     ASSERT_EQ(castlingMove->moveType, KINGSIDE_CASTLE);
 }
 
+TEST(KingTests, ExecuteKingsideCastle)
+{
+    // arrange
+    std::vector<Move *> moves;
+    Chess c = Chess(8, 8);
+    Factories::BoardFactory::CreateBoard(&c, "    K  R", "");
+    c.PrintBoard();
+
+    Piece *king = c.pieces[WHITE][0];
+    Piece *rook = c.pieces[WHITE][1];
+
+    king->AppendMoves(&c, moves);
+    Move *castlingMove = moves[5];
+    c.ExecuteMove(castlingMove);
+    c.PrintBoard();
+
+    ASSERT_EQ(king->x, 6);
+    ASSERT_EQ(king->y, 0);
+    ASSERT_EQ(rook->x, 5);
+    ASSERT_EQ(rook->y, 0);
+}
+
+TEST(KingTests, ExecuteQueensideCastle)
+{
+    // arrange
+    std::vector<Move *> moves;
+    Chess c = Chess(8, 8);
+    Factories::BoardFactory::CreateBoard(&c, "R   K", "");
+    c.PrintBoard();
+
+    Piece *king = c.pieces[WHITE][1];
+    Piece *rook = c.pieces[WHITE][0];
+
+    king->AppendMoves(&c, moves);
+    Move *castlingMove = moves[5];
+    c.ExecuteMove(castlingMove);
+    c.PrintBoard();
+
+    king = c.pieces[WHITE][1];
+    rook = c.pieces[WHITE][0];
+
+    ASSERT_EQ(king->x, 2);
+    ASSERT_EQ(king->y, 0);
+    ASSERT_EQ(rook->x, 3);
+    ASSERT_EQ(rook->y, 0);
+}
+
 TEST(KingTests, NoCastlingIfEndResultIsCheck2)
 {
     // arrange

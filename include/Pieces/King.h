@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Piece.h"
+#include "Rook.h"
 
 namespace Entities
 {
@@ -25,7 +26,7 @@ namespace Entities
         King(int x, int y, Player player, bool didKingMove = false);
         virtual void AppendMoves(Chess *game, std::vector<Move *> &potentialMoves);
         int GetNewKingXForCastling(MoveType moveType, Piece *rook);
-        Piece *GetCastlingRook(MoveType move, Chess *game);
+        Rook *GetCastlingRook(MoveType move, Chess *game);
         bool IsCastlingPossible(MoveType move, Chess *game);
         virtual bool CanPieceCaptureSquare(int x, int y, Chess *game);
         virtual PieceType GetType();

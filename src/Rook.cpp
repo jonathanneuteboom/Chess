@@ -6,9 +6,9 @@
 
 namespace Entities
 {
-    Rook::Rook(int x, int y, Player player, bool canCastle) : Piece(x, y, player)
+    Rook::Rook(int x, int y, Player player, bool didRookMove) : Piece(x, y, player)
     {
-        this->canCastle = canCastle;
+        this->didRookMove = didRookMove;
     }
 
     void Rook::AppendMoves(Chess *game, std::vector<Move *> &potentialMoves)
@@ -55,8 +55,14 @@ namespace Entities
         return false;
     }
 
+    void Rook::ExecuteMove(Chess *game, Move *move)
+    {
+        didRookMove = true;
+        Piece::ExecuteMove(game, move);
+    }
+
     PieceType Rook::GetType()
     {
-        return canCastle ? ROOK_CASTLE : ROOK;
+        return didRookMove ? ROOK : ROOK_CASTLE;
     }
 } // namespace Entities

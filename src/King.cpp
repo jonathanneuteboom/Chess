@@ -57,7 +57,7 @@ namespace Entities
         return moveType == QUEENSIDE_CASTLE ? x - distance : x + distance;
     }
 
-    Piece *King::GetCastlingRook(MoveType move, Chess *game)
+    Rook *King::GetCastlingRook(MoveType move, Chess *game)
     {
         int i = move == QUEENSIDE_CASTLE ? 0 : game->width - 1;
         int dx = move == QUEENSIDE_CASTLE ? 1 : -1;
@@ -65,7 +65,7 @@ namespace Entities
         {
             Piece *piece = game->GetPiece(i, y);
             if (piece != nullptr && piece->GetType() == ROOK_CASTLE)
-                return piece;
+                return (Rook *)piece;
         }
 
         return nullptr;
@@ -124,22 +124,20 @@ namespace Entities
             break;
         case KINGSIDE_CASTLE:
         {
-            King *king = (King *)move->piece;
-            Piece *rook = king->GetCastlingRook(KINGSIDE_CASTLE, game);
-            Move rookMove = Move(rook, move->newX - 1, move->piece->y, WALK);
+            Rook *rook = GetCastlingRook(KINGSIDE_CASTLE, game);
+            Move rookMove = Move(rook, move->newX - 1, rook->y, WALK);
 
+            rook->ExecuteMove(game, &rookMove);
             Piece::ExecuteMove(game, move);
-            Piece::ExecuteMove(game, &rookMove);
             break;
         }
         case QUEENSIDE_CASTLE:
         {
-            King *king = (King *)move->piece;
-            Piece *rook = king->GetCastlingRook(QUEENSIDE_CASTLE, game);
-            Move rookMove = Move(rook, move->newX + 1, move->piece->y, WALK);
+            Rook *rook = GetCastlingRook(QUEENSIDE_CASTLE, game);
+            Move rookMove = Move(rook, move->newX + 1, rook->y, WALK);
 
+            rook->ExecuteMove(game, &rookMove);
             Piece::ExecuteMove(game, move);
-            Piece::ExecuteMove(game, &rookMove);
             break;
         }
         default:

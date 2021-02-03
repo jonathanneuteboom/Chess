@@ -34,7 +34,7 @@ namespace Factories
         case QUEEN:
             return new Entities::Queen(x, y, player);
         case ROOK:
-            return new Entities::Rook(x, y, player, false);
+            return new Entities::Rook(x, y, player, true);
         case ROOK_CASTLE:
             return new Entities::Rook(x, y, player);
         }
