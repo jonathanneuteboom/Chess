@@ -220,6 +220,9 @@ TEST(KingTests, ExecuteKingsideCastle)
     c.ExecuteMove(castlingMove);
     c.PrintBoard();
 
+    king = c.pieces[WHITE][0];
+    rook = c.pieces[WHITE][1];
+
     ASSERT_EQ(king->x, 6);
     ASSERT_EQ(king->y, 0);
     ASSERT_EQ(rook->x, 5);
@@ -266,6 +269,9 @@ TEST(KingTests, ExecuteSmallKingsideCastle)
     Move *castlingMove = moves[4];
     c.ExecuteMove(castlingMove);
     c.PrintBoard();
+
+    king = c.pieces[WHITE][0];
+    rook = c.pieces[WHITE][1];
 
     ASSERT_EQ(king->x, 3);
     ASSERT_EQ(king->y, 0);
