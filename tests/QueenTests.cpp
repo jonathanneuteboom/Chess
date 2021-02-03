@@ -13,7 +13,7 @@ TEST(QueenTests, Possibilities1)
     c.PrintBoard();
 
     // act
-    c.pieces[c.GetPlayerIndex(WHITE)][0]->AppendMoves(&c, moves);
+    c.pieces[WHITE][0]->AppendMoves(&c, moves);
 
     // assert
     ASSERT_EQ(moves.size(), 16);
@@ -47,7 +47,7 @@ TEST(QueenTests, Possibilities2)
     // assert
     for (int i = 0; i < 16; i++)
     {
-        bool canCaptureSquare = c.pieces[c.GetPlayerIndex(WHITE)][0]->CanPieceCaptureSquare(squares[i][0], squares[i][1], &c);
+        bool canCaptureSquare = c.pieces[WHITE][0]->CanPieceCaptureSquare(squares[i][0], squares[i][1], &c);
         ASSERT_EQ(canCaptureSquare, true);
     }
 }
@@ -72,7 +72,7 @@ TEST(QueenTests, Possibilites3)
     {
         for (int y = 0; y < 5; y++)
         {
-            bool canCaptureSquare = c.pieces[c.GetPlayerIndex(WHITE)][0]->CanPieceCaptureSquare(x, y, &c);
+            bool canCaptureSquare = c.pieces[WHITE][0]->CanPieceCaptureSquare(x, y, &c);
             bool shouldCaptureSquare = squares[x][y];
             ASSERT_EQ(canCaptureSquare, shouldCaptureSquare);
         }

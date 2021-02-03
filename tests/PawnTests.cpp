@@ -81,10 +81,10 @@ TEST(Pion, promotionMove)
     c.ExecuteMove(moves[0]);
 
     //assert
-    EXPECT_EQ(c.numberOfPieces[c.GetPlayerIndex(WHITE)], 1);
-    EXPECT_EQ(c.numberOfPieces[c.GetPlayerIndex(BLACK)], 0);
+    EXPECT_EQ(c.numberOfPieces[WHITE], 1);
+    EXPECT_EQ(c.numberOfPieces[BLACK], 0);
 
-    Piece *queen = c.pieces[c.GetPlayerIndex(WHITE)][0];
+    Piece *queen = c.pieces[WHITE][0];
     EXPECT_EQ(queen->GetType(), QUEEN);
     EXPECT_EQ(queen->x, 0);
     EXPECT_EQ(queen->y, 3);
@@ -116,7 +116,7 @@ TEST(PawnTests, PawnTypes)
     Chess c = Chess(4, 4);
     Factories::BoardFactory::CreateBoard(&c, "p", "p");
     c.PrintBoard();
-    ASSERT_EQ(c.pieces[c.GetPlayerIndex(WHITE)][0]->GetType(), PAWN);
+    ASSERT_EQ(c.pieces[WHITE][0]->GetType(), PAWN);
 
     // act
     c.AppendMoves(moves);
@@ -124,7 +124,7 @@ TEST(PawnTests, PawnTypes)
     c.PrintBoard();
 
     // assert
-    ASSERT_EQ(c.pieces[c.GetPlayerIndex(WHITE)][0]->GetType(), PAWN_EN_PASSANT);
+    ASSERT_EQ(c.pieces[WHITE][0]->GetType(), PAWN_EN_PASSANT);
 
     moves.clear();
     c.AppendMoves(moves);
@@ -132,7 +132,7 @@ TEST(PawnTests, PawnTypes)
     c.PrintBoard();
 
     // assert
-    ASSERT_EQ(c.pieces[c.GetPlayerIndex(WHITE)][0]->GetType(), PAWN);
+    ASSERT_EQ(c.pieces[WHITE][0]->GetType(), PAWN);
 }
 
 TEST(Pion, Capture)
@@ -174,7 +174,7 @@ TEST(PawnTests, Possibilites)
     {
         for (int y = 0; y < 5; y++)
         {
-            bool canCaptureSquare = c.pieces[c.GetPlayerIndex(WHITE)][0]->CanPieceCaptureSquare(x, y, &c);
+            bool canCaptureSquare = c.pieces[WHITE][0]->CanPieceCaptureSquare(x, y, &c);
             bool shouldCaptureSquare = squares[x][y];
             ASSERT_EQ(canCaptureSquare, shouldCaptureSquare);
         }

@@ -13,7 +13,7 @@ TEST(BishopTests, Possibilites1)
     c.PrintBoard();
 
     // act
-    c.pieces[c.GetPlayerIndex(WHITE)][2]->AppendMoves(&c, moves);
+    c.pieces[WHITE][2]->AppendMoves(&c, moves);
 
     // assert
     ASSERT_EQ(moves.size(), 0);
@@ -39,7 +39,7 @@ TEST(BishopTests, Possibilites2)
     {
         for (int y = 0; y < 5; y++)
         {
-            bool canCaptureSquare = c.pieces[c.GetPlayerIndex(WHITE)][0]->CanPieceCaptureSquare(x, y, &c);
+            bool canCaptureSquare = c.pieces[WHITE][0]->CanPieceCaptureSquare(x, y, &c);
             bool shouldCaptureSquare = squares[x][y];
             ASSERT_EQ(canCaptureSquare, shouldCaptureSquare);
         }
@@ -55,11 +55,11 @@ TEST(BishopTests, Possibilites3)
     c.PrintBoard();
 
     // act
-    c.pieces[c.GetPlayerIndex(WHITE)][0]->AppendMoves(&c, moves);
+    c.pieces[WHITE][0]->AppendMoves(&c, moves);
     c.ExecuteMove(moves[0]);
 
     // assert
     ASSERT_EQ(moves.size(), 4);
-    ASSERT_EQ(c.numberOfPieces[c.GetPlayerIndex(WHITE)], 1);
-    ASSERT_EQ(c.numberOfPieces[c.GetPlayerIndex(BLACK)], 3);
+    ASSERT_EQ(c.numberOfPieces[WHITE], 1);
+    ASSERT_EQ(c.numberOfPieces[BLACK], 3);
 }

@@ -37,19 +37,17 @@ namespace Entities
 
     void Chess::AppendMoves(std::vector<Move *> &moves)
     {
-        int playerIndex = GetPlayerIndex(currentPlayer);
-        for (int i = 0; i < numberOfPieces[playerIndex]; i++)
+        for (int i = 0; i < numberOfPieces[currentPlayer]; i++)
         {
-            pieces[playerIndex][i]->AppendMoves(this, moves);
+            pieces[currentPlayer][i]->AppendMoves(this, moves);
         }
     }
 
     bool Chess::CanPlayerCaptureSquare(Player player, int x, int y)
     {
-        int playerIndex = GetPlayerIndex(player);
-        for (int i = 0; i < numberOfPieces[playerIndex]; i++)
+        for (int i = 0; i < numberOfPieces[player]; i++)
         {
-            if (pieces[playerIndex][i]->CanPieceCaptureSquare(x, y, this))
+            if (pieces[player][i]->CanPieceCaptureSquare(x, y, this))
                 return true;
         }
         return false;
@@ -58,11 +56,6 @@ namespace Entities
     Player Chess::GetOpponent(Player player)
     {
         return player == WHITE ? BLACK : WHITE;
-    }
-
-    int Chess::GetPlayerIndex(Player player)
-    {
-        return player == WHITE ? 0 : 1;
     }
 
     void Chess::PrintBoard()
@@ -123,50 +116,49 @@ namespace Entities
 
     void Chess::AddPiece(Player player, PieceType pieceType, int x, int y)
     {
-        int playerIndex = GetPlayerIndex(player);
-        Piece **newPieces = new Piece *[numberOfPieces[playerIndex] + 1];
+        Piece **newPieces = new Piece *[numberOfPieces[player] + 1];
 
-        for (int i = 0; i < numberOfPieces[playerIndex]; i++)
+        for (int i = 0; i < numberOfPieces[player]; i++)
         {
-            newPieces[i] = pieces[playerIndex][i];
+            newPieces[i] = pieces[player][i];
         }
 
-        if (pieces[playerIndex] != NULL)
+        if (pieces[player] != NULL)
         {
-            delete pieces[playerIndex];
+            delete pieces[player];
         }
-        pieces[playerIndex] = newPieces;
+        pieces[player] = newPieces;
 
         Piece *piece = PieceFactory::CreatePiece(player, pieceType, x, y, this);
         SetPiece(piece, x, y);
 
-        int newPieceIndex = numberOfPieces[playerIndex]++;
-        pieces[playerIndex][newPieceIndex] = piece;
+        int newPieceIndex = numberOfPieces[player]++;
+        pieces[player][newPieceIndex] = piece;
     }
 
     void Chess::RemovePiece(Piece *piece)
     {
-        int playerIndex = GetPlayerIndex(piece->player);
-        int newNumberOfPieces = numberOfPieces[playerIndex] - 1;
+        int player = piece->player;
+        int newNumberOfPieces = numberOfPieces[player] - 1;
         Piece **newPieces = newNumberOfPieces > 0 ? new Piece *[newNumberOfPieces] : NULL;
 
         int pieceCounter = 0;
-        for (int i = 0; i < numberOfPieces[playerIndex]; i++)
+        for (int i = 0; i < numberOfPieces[player]; i++)
         {
-            if (pieces[playerIndex][i]->x == piece->x &&
-                pieces[playerIndex][i]->y == piece->y)
+            if (pieces[player][i]->x == piece->x &&
+                pieces[player][i]->y == piece->y)
             {
                 SetPiece(nullptr, piece->x, piece->y);
                 continue;
             }
 
-            newPieces[pieceCounter++] = pieces[playerIndex][i];
+            newPieces[pieceCounter++] = pieces[player][i];
         }
 
         delete piece;
-        delete pieces[playerIndex];
-        pieces[playerIndex] = newPieces;
-        numberOfPieces[playerIndex]--;
+        delete pieces[player];
+        pieces[player] = newPieces;
+        numberOfPieces[player]--;
     }
 
     void Chess::ExecuteMove(Move *move)

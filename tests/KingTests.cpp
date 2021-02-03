@@ -13,7 +13,7 @@ TEST(KingTests, Possibilities1)
     c.PrintBoard();
 
     // act
-    c.pieces[c.GetPlayerIndex(WHITE)][0]->AppendMoves(&c, moves);
+    c.pieces[WHITE][0]->AppendMoves(&c, moves);
 
     // assert
     ASSERT_EQ(moves.size(), 8);
@@ -28,7 +28,7 @@ TEST(KingTests, Possibilities2)
     c.PrintBoard();
 
     // assert
-    ASSERT_EQ(c.pieces[c.GetPlayerIndex(WHITE)][0]->GetType(), KING_CASTLE);
+    ASSERT_EQ(c.pieces[WHITE][0]->GetType(), KING_CASTLE);
 }
 
 TEST(KingTests, Possibilities3)
@@ -40,11 +40,11 @@ TEST(KingTests, Possibilities3)
     c.PrintBoard();
 
     // act
-    c.pieces[c.GetPlayerIndex(WHITE)][0]->AppendMoves(&c, moves);
+    c.pieces[WHITE][0]->AppendMoves(&c, moves);
     c.ExecuteMove(moves[0]);
 
     // assert
-    ASSERT_EQ(c.pieces[c.GetPlayerIndex(WHITE)][0]->GetType(), KING);
+    ASSERT_EQ(c.pieces[WHITE][0]->GetType(), KING);
 }
 
 TEST(KingTests, Possibilites4)
@@ -67,7 +67,7 @@ TEST(KingTests, Possibilites4)
     {
         for (int y = 0; y < 5; y++)
         {
-            bool canCaptureSquare = c.pieces[c.GetPlayerIndex(WHITE)][0]->CanPieceCaptureSquare(x, y, &c);
+            bool canCaptureSquare = c.pieces[WHITE][0]->CanPieceCaptureSquare(x, y, &c);
             bool shouldCaptureSquare = squares[x][y];
             ASSERT_EQ(canCaptureSquare, shouldCaptureSquare);
         }
@@ -182,7 +182,7 @@ TEST(KingTests, NoCastlingIfEndResultIsCheck1)
     Factories::BoardFactory::CreateBoard(&c, "  KR", "- N     Q");
     c.PrintBoard();
 
-    c.pieces[c.GetPlayerIndex(WHITE)][0]->AppendMoves(&c, moves);
+    c.pieces[WHITE][0]->AppendMoves(&c, moves);
 
     ASSERT_EQ(moves.size(), 0);
 }
@@ -195,7 +195,7 @@ TEST(KingTests, ValidCastling)
     Factories::BoardFactory::CreateBoard(&c, "    K  R", "R");
     c.PrintBoard();
 
-    c.pieces[c.GetPlayerIndex(WHITE)][0]->AppendMoves(&c, moves);
+    c.pieces[WHITE][0]->AppendMoves(&c, moves);
 
     ASSERT_EQ(moves.size(), 6);
     Move *castlingMove = moves[5];
@@ -212,7 +212,7 @@ TEST(KingTests, NoCastlingIfEndResultIsCheck2)
     Factories::BoardFactory::CreateBoard(&c, "    K  R", " R");
     c.PrintBoard();
 
-    c.pieces[c.GetPlayerIndex(WHITE)][0]->AppendMoves(&c, moves);
+    c.pieces[WHITE][0]->AppendMoves(&c, moves);
 
     ASSERT_EQ(moves.size(), 5);
 }
@@ -225,7 +225,7 @@ TEST(KingTests, NoCastlingIfEndResultIsCheck3)
     Factories::BoardFactory::CreateBoard(&c, "    K  R", "  R");
     c.PrintBoard();
 
-    c.pieces[c.GetPlayerIndex(WHITE)][0]->AppendMoves(&c, moves);
+    c.pieces[WHITE][0]->AppendMoves(&c, moves);
 
     ASSERT_EQ(moves.size(), 3);
 }
