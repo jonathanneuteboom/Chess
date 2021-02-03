@@ -41,6 +41,11 @@ namespace Entities
         return true;
     }
 
+    void Bishop::ExecuteMove(Chess *game, Move *move)
+    {
+        game->Walk(move);
+    }
+
     PieceType Bishop::GetType()
     {
         return BISHOP;

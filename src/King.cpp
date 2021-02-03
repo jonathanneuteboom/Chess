@@ -120,24 +120,24 @@ namespace Entities
         switch (move->moveType)
         {
         case WALK:
-            Piece::ExecuteMove(game, move);
+            game->Walk(move);
             break;
         case KINGSIDE_CASTLE:
         {
-            Rook *rook = GetCastlingRook(KINGSIDE_CASTLE, game);
-            Move rookMove = Move(rook, move->newX - 1, rook->y, WALK);
+            Piece *rook = GetCastlingRook(KINGSIDE_CASTLE, game);
+            game->RemovePiece(rook);
+            game->Walk(move);
+            game->AddPiece(player, ROOK, x - 1, y);
 
-            rook->ExecuteMove(game, &rookMove);
-            Piece::ExecuteMove(game, move);
             break;
         }
         case QUEENSIDE_CASTLE:
         {
             Rook *rook = GetCastlingRook(QUEENSIDE_CASTLE, game);
-            Move rookMove = Move(rook, move->newX + 1, rook->y, WALK);
+            game->RemovePiece(rook);
+            game->Walk(move);
+            game->AddPiece(player, ROOK, x + 1, y);
 
-            rook->ExecuteMove(game, &rookMove);
-            Piece::ExecuteMove(game, move);
             break;
         }
         default:

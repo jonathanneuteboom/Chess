@@ -70,3 +70,22 @@ TEST(RookTests, Possibilites3)
         }
     }
 }
+
+TEST(RookTests, AfterMoveNoCastling)
+{
+    // arrange
+    std::vector<Move *> moves;
+    Chess c = Chess(8, 1);
+    Factories::BoardFactory::CreateBoard(&c, "    K  R", "");
+    c.PrintBoard();
+
+    // act
+    c.pieces[WHITE][1]->AppendMoves(&c, moves);
+    c.ExecuteMove(moves[0]);
+    moves.clear();
+
+    c.pieces[WHITE][0]->AppendMoves(&c, moves);
+
+    // assert
+    ASSERT_EQ(moves.size(), 2);
+}

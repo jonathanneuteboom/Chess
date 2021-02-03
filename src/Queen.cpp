@@ -32,6 +32,11 @@ namespace Entities
         return false;
     }
 
+    void Queen::ExecuteMove(Chess *game, Move *move)
+    {
+        game->Walk(move);
+    }
+
     PieceType Queen::GetType()
     {
         return QUEEN;

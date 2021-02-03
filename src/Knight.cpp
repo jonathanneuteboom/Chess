@@ -37,6 +37,11 @@ namespace Entities
         }
     }
 
+    void Knight::ExecuteMove(Chess *game, Move *move)
+    {
+        game->Walk(move);
+    }
+
     PieceType Knight::GetType()
     {
         return KNIGHT;

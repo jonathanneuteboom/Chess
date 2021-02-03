@@ -43,19 +43,4 @@ namespace Entities
             }
         }
     }
-
-    void Piece::ExecuteMove(Chess *game, Move *move)
-    {
-        Piece *piece = game->GetPiece(move->newX, move->newY);
-        if (piece != nullptr)
-        {
-            game->RemovePiece(piece);
-        }
-
-        game->SetPiece(nullptr, move->piece->x, move->piece->y);
-        game->SetPiece(move->piece, move->newX, move->newY);
-
-        x = move->newX;
-        y = move->newY;
-    }
 } // namespace Entities

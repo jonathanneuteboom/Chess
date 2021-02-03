@@ -16,16 +16,15 @@ TEST(GeneralTests, StartingMoves)
     c.AppendMoves(moves);
 
     // assert
-    ASSERT_EQ(moves.size(), 20);
+    ASSERT_EQ(c.GetNumberOfMoves(WHITE), 20);
+    ASSERT_EQ(c.GetNumberOfMoves(BLACK), 20);
 
     c.ExecuteMove(moves[0]);
-
-    // act
-    moves.clear();
-    c.AppendMoves(moves);
+    c.PrintBoard();
 
     // assert
-    ASSERT_EQ(moves.size(), 20);
+    ASSERT_EQ(c.GetNumberOfMoves(WHITE), 22);
+    ASSERT_EQ(c.GetNumberOfMoves(BLACK), 20);
 }
 
 TEST(GeneralTests, manyMoves)
@@ -42,7 +41,7 @@ TEST(GeneralTests, manyMoves)
     {
         int somewhatRandomNumber = i++ % moves.size();
         Move *move = moves[somewhatRandomNumber];
-        c.ExecuteMove(move);
+        c.ExecuteMove(move);        
         moves.clear();
         c.AppendMoves(moves);
     }

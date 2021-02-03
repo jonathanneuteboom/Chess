@@ -58,7 +58,7 @@ namespace Entities
     void Rook::ExecuteMove(Chess *game, Move *move)
     {
         didRookMove = true;
-        Piece::ExecuteMove(game, move);
+        game->Walk(move);
     }
 
     PieceType Rook::GetType()

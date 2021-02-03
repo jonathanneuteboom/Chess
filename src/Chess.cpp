@@ -109,6 +109,21 @@ namespace Entities
         return board[x + y * width];
     }
 
+    void Chess::Walk(Move *move)
+    {
+        Piece *piece = GetPiece(move->newX, move->newY);
+        if (piece != nullptr)
+        {
+            RemovePiece(piece);
+        }
+
+        SetPiece(nullptr, move->piece->x, move->piece->y);
+        SetPiece(move->piece, move->newX, move->newY);
+
+        move->piece->x = move->newX;
+        move->piece->y = move->newY;
+    }
+
     void Chess::SetPiece(Piece *piece, int x, int y)
     {
         board[x + y * width] = piece;
@@ -159,6 +174,15 @@ namespace Entities
         delete pieces[player];
         pieces[player] = newPieces;
         numberOfPieces[player]--;
+    }
+
+    int Chess::GetNumberOfMoves(Player player)
+    {
+        std::vector<Move*> moves;
+        for (int i = 0; i < numberOfPieces[player]; i++){
+            pieces[player][i]->AppendMoves(this, moves);
+        }
+        return moves.size();
     }
 
     void Chess::ExecuteMove(Move *move)

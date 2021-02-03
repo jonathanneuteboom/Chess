@@ -89,7 +89,7 @@ namespace Entities
             int newY = enPassantPawns[i][1];
             if (game->IsSquareOusideBounds(newX, newY))
                 continue;
-                
+
             Piece *piece = game->GetPiece(newX, newY);
             if (piece == nullptr)
                 continue;
@@ -154,7 +154,7 @@ namespace Entities
             {
                 doubleSquareMoveRound = game->currentRound;
             }
-            Piece::ExecuteMove(game, move);
+            game->Walk(move);
             break;
         }
         case QUEEN_PROMOTION:
@@ -171,7 +171,7 @@ namespace Entities
         {
             Piece *opposingPawn = game->GetPiece(move->newX, move->piece->y);
             game->RemovePiece(opposingPawn);
-            Piece::ExecuteMove(game, move);
+            game->Walk(move);
             break;
         }
         default:

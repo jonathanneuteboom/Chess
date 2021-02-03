@@ -25,11 +25,12 @@ namespace Entities
     public:
         King(int x, int y, Player player, bool didKingMove = false);
         virtual void AppendMoves(Chess *game, std::vector<Move *> &potentialMoves);
-        int GetNewKingXForCastling(MoveType moveType, Piece *rook);
-        Rook *GetCastlingRook(MoveType move, Chess *game);
-        bool IsCastlingPossible(MoveType move, Chess *game);
         virtual bool CanPieceCaptureSquare(int x, int y, Chess *game);
         virtual PieceType GetType();
         virtual void ExecuteMove(Chess *game, Move *move);
+
+        int GetNewKingXForCastling(MoveType moveType, Piece *rook);
+        Rook *GetCastlingRook(MoveType move, Chess *game);
+        bool IsCastlingPossible(MoveType move, Chess *game);
     };
 } // namespace Entities

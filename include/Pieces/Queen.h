@@ -23,9 +23,8 @@ namespace Entities
         Queen(int x, int y, Player player);
 
         virtual void AppendMoves(Chess *game, std::vector<Move *> &potentialMoves);
-
         virtual bool CanPieceCaptureSquare(int x, int y, Chess *game);
-
+        virtual void ExecuteMove(Chess *game, Move *move);
         virtual PieceType GetType();
     };
 } // namespace Entities

@@ -35,9 +35,11 @@ namespace Entities
         void SetPiece(Piece *piece, int x, int y);
         void AddPiece(Player player, PieceType pieceType, int x, int y);
         void RemovePiece(Piece *piece);
+        int GetNumberOfMoves(Player player);
 
         void AppendMoves(std::vector<Move *> &moves);
         void ExecuteMove(Move *move);
+        void Walk(Move *move);
 
         bool CanPlayerCaptureSquare(Player player, int x, int y);
         Player GetOpponent(Player player);
