@@ -31,7 +31,7 @@ namespace Entities
             if (game->CanPlayerCaptureSquare(opponent, newX, newY))
                 continue;
 
-            move = new Move(this, newX, newY, WALK);
+            move = new Move(x, y, newX, newY, WALK);
             potentialMoves.push_back(move);
         }
 
@@ -45,7 +45,7 @@ namespace Entities
             {
                 Piece *rook = GetCastlingRook(castlingOption, game);
                 int newX = GetNewKingXForCastling(castlingOption, rook);
-                move = new Move(this, newX, y, castlingOption);
+                move = new Move(x, y, newX, y, castlingOption);
                 potentialMoves.push_back(move);
             }
         }

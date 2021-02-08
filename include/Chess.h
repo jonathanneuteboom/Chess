@@ -2,6 +2,7 @@
 
 #include "Piece.h"
 #include "Move.h"
+#include "Score.h"
 #include "MoveType.h"
 #include "PieceType.h"
 #include "Player.h"
@@ -10,6 +11,7 @@ namespace Entities
 {
     class Piece;
     class Move;
+    class Score;
     class Chess
     {
     public:
@@ -40,8 +42,10 @@ namespace Entities
         int GetNumberOfMoves(Player player);
 
         void AppendMoves(std::vector<Move *> &moves);
+        void ClearMoves(std::vector<Move *> &moves);
         void ExecuteMove(Move *move);
         void Walk(Move *move);
+        Score* CalcBestMove();
 
         bool CanPlayerCaptureSquare(Player player, int x, int y);
         Player GetOpponent(Player player);

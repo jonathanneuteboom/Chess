@@ -33,13 +33,13 @@ namespace Entities
                 {
                     if (game->GetPiece(newX, newY)->player != player)
                     {
-                        potentialMoves.push_back(new Move(this, newX, newY, WALK));
+                        potentialMoves.push_back(new Move(x, y, newX, newY, WALK));
                     }
 
                     break;
                 }
 
-                potentialMoves.push_back(new Move(this, newX, newY, WALK));
+                potentialMoves.push_back(new Move(x, y, newX, newY, WALK));
             }
         }
     }

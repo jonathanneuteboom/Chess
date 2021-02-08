@@ -35,21 +35,21 @@ namespace Entities
         int lastRow = player == WHITE ? game->height - 1 : 0;
         if (lastRow != newY)
         {
-            newMove = new Move(this, newX, newY, WALK);
+            newMove = new Move(x, y, newX, newY, WALK);
             potentialMoves.push_back(newMove);
         }
         else
         {
-            newMove = new Move(this, newX, newY, QUEEN_PROMOTION);
+            newMove = new Move(x, y, newX, newY, QUEEN_PROMOTION);
             potentialMoves.push_back(newMove);
 
-            newMove = new Move(this, newX, newY, ROOK_PROMOTION);
+            newMove = new Move(x, y, newX, newY, ROOK_PROMOTION);
             potentialMoves.push_back(newMove);
 
-            newMove = new Move(this, newX, newY, KNIGHT_PROMOTION);
+            newMove = new Move(x, y, newX, newY, KNIGHT_PROMOTION);
             potentialMoves.push_back(newMove);
 
-            newMove = new Move(this, newX, newY, BISHOP_PROMOTION);
+            newMove = new Move(x, y, newX, newY, BISHOP_PROMOTION);
             potentialMoves.push_back(newMove);
         }
     }
@@ -98,7 +98,7 @@ namespace Entities
                 piece->player == player)
                 continue;
 
-            Move *newMove = new Move(this, newX, newY + direction, EN_PASSANT_CAPTURE);
+            Move *newMove = new Move(x, y, newX, newY + direction, EN_PASSANT_CAPTURE);
             potentialMoves.push_back(newMove);
         }
     }
@@ -162,6 +162,12 @@ namespace Entities
         case KNIGHT_PROMOTION:
         case BISHOP_PROMOTION:
         {
+            Piece *piece = game->GetPiece(move->newX, move->newY);
+            if (piece != nullptr)
+            {
+                game->RemovePiece(piece);
+            }
+
             PieceType newPieceType = GetPromotedPieceType(move->moveType);
             game->AddPiece(player, newPieceType, move->newX, move->newY);
             game->RemovePiece(this);
@@ -169,13 +175,13 @@ namespace Entities
         }
         case EN_PASSANT_CAPTURE:
         {
-            Piece *opposingPawn = game->GetPiece(move->newX, move->piece->y);
+            Piece *opposingPawn = game->GetPiece(move->newX, y);
             game->RemovePiece(opposingPawn);
             game->Walk(move);
             break;
         }
         default:
-            break;
+            throw;
         }
     }
 

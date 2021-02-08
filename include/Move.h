@@ -6,15 +6,15 @@
 namespace Entities
 {
     class Piece;
+    class Score;
     class Move
     {
     public:
-        Piece *piece;
-        int newX;
-        int newY;
+        int x, y;
+        int newX, newY;
         MoveType moveType;
 
-        Move(Piece *piece, int newX, int newY, MoveType moveType);
-        void Print();
+        Move(int x, int y, int newX, int newY, MoveType moveType);
+        void Print(Piece *piece);
     };
 } // namespace Entities

@@ -32,7 +32,7 @@ namespace Entities
             if (piece != nullptr && piece->player == player)
                 continue;
 
-            newMove = new Move(this, newX, newY, WALK);
+            newMove = new Move(x, y, newX, newY, WALK);
             potentialMoves.push_back(newMove);
         }
     }

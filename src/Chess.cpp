@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "Chess.h"
+#include "Score.h"
 #include "Pieces\King.h"
 #include "PieceType.h"
 #include "Piece.h"
@@ -12,6 +13,25 @@ using namespace Factories;
 
 namespace Entities
 {
+    Score *Chess::CalcBestMove()
+    {
+        std::vector<Move *> moves;
+        AppendMoves(moves);
+
+        Move *bestMove;
+        Score *bestScore = new Score();
+
+        for (int i = 0; i < (int)moves.size(); i++)
+        {
+            Chess *newBoard = Clone();
+            newBoard->ExecuteMove(moves[i]);
+        }
+
+        ClearMoves(moves);
+
+        return bestScore;
+    }
+
     Chess::Chess(int width, int height, Player currentPlayer)
     {
         this->currentPlayer = currentPlayer;
@@ -106,7 +126,8 @@ namespace Entities
 
         for (int i = 0; i < width; i++)
             std::cout << "-";
-        std::cout << "--" << std::endl;
+        std::cout << "--" << std::endl
+                  << "Round: " << currentRound << std::endl;
     }
 
     int Chess::GetCurrentRound()
@@ -137,11 +158,12 @@ namespace Entities
             RemovePiece(piece);
         }
 
-        SetPiece(nullptr, move->piece->x, move->piece->y);
-        SetPiece(move->piece, move->newX, move->newY);
+        piece = GetPiece(move->x, move->y);
+        SetPiece(piece, move->newX, move->newY);
+        SetPiece(nullptr, move->x, move->y);
 
-        move->piece->x = move->newX;
-        move->piece->y = move->newY;
+        piece->x = move->newX;
+        piece->y = move->newY;
     }
 
     void Chess::SetPiece(Piece *piece, int x, int y)
@@ -208,9 +230,19 @@ namespace Entities
 
     void Chess::ExecuteMove(Move *move)
     {
-        move->piece->ExecuteMove(this, move);
+        Piece *piece = GetPiece(move->x, move->y);
+        piece->ExecuteMove(this, move);
 
         currentPlayer = GetOpponent(currentPlayer);
         currentRound++;
+    }
+
+    void Chess::ClearMoves(std::vector<Move *> &moves)
+    {
+        for (int i = 0; i < (int)moves.size(); i++)
+        {
+            delete moves[i];
+        }
+        moves.clear();
     }
 } // namespace Entities

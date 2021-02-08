@@ -32,19 +32,23 @@ TEST(GeneralTests, manyMoves)
     std::vector<Move *> moves;
     Chess c = Chess(8, 8);
     Factories::BoardFactory::CreateBoard(&c);
-    c.PrintBoard();
-    c.AppendMoves(moves);
 
     int i = 0;
 
-    while (moves.size() != 0)
+    while (true)
     {
+        c.PrintBoard();
+        moves.clear();
+
+        c.AppendMoves(moves);
+        if (moves.size() == 0)
+            break;
+
         int somewhatRandomNumber = i++ % moves.size();
         Move *move = moves[somewhatRandomNumber];
-        c.ExecuteMove(move);        
-        moves.clear();
-        c.AppendMoves(moves);
+
+        c.ExecuteMove(move);
     }
 
-    ASSERT_EQ(i, 284); // Apparently
+    ASSERT_EQ(i, 213); // Apparently
 }

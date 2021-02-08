@@ -4,7 +4,7 @@
 
 using namespace Entities;
 
-TEST(Pion, standardWalk)
+TEST(PawnTests, standardWalk)
 {
     // arrange
     std::vector<Move *> moves;
@@ -28,7 +28,7 @@ TEST(Pion, standardWalk)
     ASSERT_EQ(tweeStappen->moveType, WALK);
 }
 
-TEST(Pion, promotion)
+TEST(PawnTests, promotion)
 {
     // arrange
     std::vector<Move *> moves;
@@ -68,7 +68,7 @@ TEST(Pion, promotion)
     ASSERT_EQ(bishopPromotion->moveType, BISHOP_PROMOTION);
 }
 
-TEST(Pion, promotionMove)
+TEST(PawnTests, promotionMove)
 {
     // arrange
     std::vector<Move *> moves;
@@ -90,7 +90,7 @@ TEST(Pion, promotionMove)
     EXPECT_EQ(queen->y, 3);
 }
 
-TEST(Pion, enPassant)
+TEST(PawnTests, enPassant)
 {
     // arrange
     std::vector<Move *> moves;
@@ -135,7 +135,7 @@ TEST(PawnTests, PawnTypes)
     ASSERT_EQ(c.pieces[WHITE][0]->GetType(), PAWN);
 }
 
-TEST(Pion, Capture)
+TEST(PawnTests, Capture)
 {
     // arrange
     std::vector<Move *> moves;
@@ -179,4 +179,26 @@ TEST(PawnTests, Possibilites)
             ASSERT_EQ(canCaptureSquare, shouldCaptureSquare);
         }
     }
+}
+
+TEST(PawnTests, promotionMoveWithCapture)
+{
+    // arrange
+    std::vector<Move *> moves;
+    Chess c = Chess(4, 4);
+    Factories::BoardFactory::CreateBoard(&c, "--p", "pppp");
+    c.PrintBoard();
+
+    // act
+    c.AppendMoves(moves);
+    c.ExecuteMove(moves[0]);
+
+    //assert
+    EXPECT_EQ(c.numberOfPieces[WHITE], 1);
+    EXPECT_EQ(c.numberOfPieces[BLACK], 3);
+
+    Piece *queen = c.pieces[WHITE][0];
+    EXPECT_EQ(queen->GetType(), QUEEN);
+    EXPECT_EQ(queen->x, 1);
+    EXPECT_EQ(queen->y, 3);
 }

@@ -5,16 +5,18 @@
 
 namespace Entities
 {
-    Move::Move(Piece *piece, int newX, int newY, MoveType moveType)
+    Move::Move(int x, int y, int newX, int newY, MoveType moveType)
     {
-        this->piece = piece;
+        this->x = x;
+        this->y = y;
         this->newX = newX;
         this->newY = newY;
         this->moveType = moveType;
     };
 
-    void Move::Print()
+    void Move::Print(Piece *piece)
     {
+
         std::cout << (char)(piece->GetType())
                   << "(" << piece->x + 1 << ", " << piece->y + 1
                   << ") -> (" << newX + 1 << ", " << newY + 1 << ") "
